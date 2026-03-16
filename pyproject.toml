@@ -1,0 +1,22 @@
+[project]
+name = "taxonomap"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "p2002222", email = "baptiste.riou2@etu.univ-lyon1.fr" }
+]
+requires-python = ">=3.10"
+dependencies = []
+
+[build-system]
+requires = ["uv_build>=0.10.4,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "numpy>=2.2.6",
+    "pandas>=2.3.3",
+    "polars>=1.39.0",
+    "pytest>=9.0.2",
+]
