@@ -7,7 +7,9 @@ authors = [
     { name = "p2002222", email = "baptiste.riou2@etu.univ-lyon1.fr" }
 ]
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "requests>=2.32.5",
+]
 
 [build-system]
 requires = ["uv_build>=0.10.4,<0.11.0"]
