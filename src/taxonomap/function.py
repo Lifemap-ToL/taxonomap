@@ -1,10 +1,12 @@
 import requests
+from config import SOLR_BASE_URL
+
 
 def taxid_to_latin_name(taxid : int): 
 
     response = requests.post(
 
-    "https://lifemap-back.univ-lyon1.fr/solr/taxo/select",
+    SOLR_BASE_URL,
         data={"q": "*:*",
           "fq" : f"taxid:{taxid}",
           "fl" : "sci_name"}
@@ -18,7 +20,7 @@ def latin_name_to_taxid(sci_name : str):
 
     response = requests.post(
 
-    "https://lifemap-back.univ-lyon1.fr/solr/taxo/select",
+    SOLR_BASE_URL,
         data={"q": "*:*",
           "fq" : f"sci_name:{sci_name}",
             "fl": "taxid,sci_name"   
