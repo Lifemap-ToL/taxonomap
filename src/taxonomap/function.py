@@ -1,19 +1,44 @@
 import requests
-from config import SOLR_BASE_URL
+from taxonomap.config import SOLR_BASE_URL
 
 
-def taxid_to_latin_name(taxid : int): 
+def taxid_to_latin_name(taxid: int):
+    """Convert taxid into scientific latin name"""
+    
+    if type(taxid) is not int or taxid <= 0:
+        raise ValueError(f"taxid must be a positive integer")
+    
+    try:
+        response = requests.post(
+            SOLR_BASE_URL,
+            data={
+                "q": "*:*",
+                "fq": f"taxid:{taxid}",
+                "fl": "sci_name"
+            },
+            timeout=10
+        )
+        response.raise_for_status() 
+        
+        result = response.json()
+        docs = result["response"]["docs"]
+        
+        if not docs:
+            raise ValueError(f"No result found for taxid: {taxid}")
+        
+        return docs[0]["sci_name"][0]
+        
+    except requests.RequestException as e:
+        raise Exception(f"API error: {str(e)}")
+        
+ 
 
-    response = requests.post(
 
-    SOLR_BASE_URL,
-        data={"q": "*:*",
-          "fq" : f"taxid:{taxid}",
-          "fl" : "sci_name"}
-    )
 
-    result = response.json()
-    return(result["response"]["docs"][0]["sci_name"][0])
+
+
+
+
 
 
 def latin_name_to_taxid(sci_name : str): 
