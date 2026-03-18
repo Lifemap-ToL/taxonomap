@@ -108,9 +108,6 @@ def get_all_ascendant( value: int | str ) -> list:
 
 
 
-
-
-
 def valid_taxid(taxid : int) -> int :
     if type(taxid) is not int : 
         raise ValueError(f"Parameters must be a taxid")
@@ -121,6 +118,18 @@ def valid_taxid(taxid : int) -> int :
     return(taxid)
 
 
+def convert_taxid( taxid : int | str ) -> int:
+
+    if type(taxid) is int:
+        return taxid
+    elif type(taxid) is str :
+        if type(int(taxid)) is int and int(taxid) >= 0:
+            return taxid
+        else :
+            raise ValueError(f"Taxid must be a positive integer or 0")
+    
+    else:
+        raise ValueError(f"invalid type of parameters")
 
 
 
@@ -131,10 +140,10 @@ def valid_taxid(taxid : int) -> int :
 
 #tests
 if __name__ == "__main__":
-    print(taxid_to_latin_name(965))
-    print(latin_name_to_taxid('Oceanospirillum'))
-    print(get_all_ascendant(965))
-
+    #print(taxid_to_latin_name(965))
+    #print(latin_name_to_taxid('Oceanospirillum'))
+    #print(get_all_ascendant(965))
+    print(convert_taxid("965"))
 
 
 
