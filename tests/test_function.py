@@ -5,10 +5,10 @@ from taxonomap.function import taxid_to_latin_name, get_all_ascendant,valid_taxi
 
 class Test_taxid_to_latin_name : 
 
-    def test_invalid_type_string(self):
+    def test_valid_type_string(self):
         """Test with string instead ofa integer"""
-        with pytest.raises(ValueError):
-            taxid_to_latin_name("965")
+        result = taxid_to_latin_name("965")
+        assert result == "Oceanospirillum"
 
 
     def test_invalid_type_float(self):
@@ -33,8 +33,8 @@ class Test_taxid_to_latin_name :
 
     def test_invalid_taxid(self):
         """Test with a non-existing taxid"""
-        with pytest.raises(ValueError):
-            taxid_to_latin_name(999999999999999999)
+        result = taxid_to_latin_name(9999999999999)
+        assert result == None
 
 
 
@@ -99,6 +99,10 @@ class Test_valid_taxid :
         result = valid_taxid(965)
         assert result == 965
 
+    def test_invalid_taxid(self):
+        """Test with a non-existing taxid"""
+        result = valid_taxid(9999999999999)
+        assert result is None
 
 class TestConvertTaxid:
     
@@ -127,6 +131,10 @@ class TestConvertTaxid:
         with pytest.raises(ValueError):
             convert_taxid(3.14)
 
+    def test_invalid_taxid(self):
+        """Test with a non-existing taxid"""
+        result = convert_taxid(9999999999999)
+        assert result is None
 
 
 
