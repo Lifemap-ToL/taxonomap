@@ -8,9 +8,11 @@ from taxonomap.config import SOLR_BASE_ADDI
 def taxid_to_latin_name(taxid: int) -> str:
     """Convert taxid into scientific latin name"""
     
-    if type(taxid) is not int or taxid <= 0:
-        raise ValueError(f"taxid must be a positive integer")
-    
+    valid_taxid(taxid)
+
+    if taxid == 0:
+        return "LUCA"
+
     try:
         response = requests.post(
             SOLR_BASE_TAXO,
@@ -73,12 +75,12 @@ def get_all_ascendant( value: int | str ) -> list:
         
         value = latin_name_to_taxid(value)
 
+    valid_taxid(value)
 
-    if type(value) is not int : 
-        raise ValueError(f"Parameters must be an taxid or a latin name")
-        
-    if value <= 0:
-        raise ValueError(f"Taxid must be a positive integer")
+
+    if value == 0:
+        return []
+
 
     try:
         response = requests.post(
@@ -103,6 +105,26 @@ def get_all_ascendant( value: int | str ) -> list:
         raise ValueError(f"No result found for taxid: {value}")
     
     return docs
+
+
+
+
+
+
+def valid_taxid(taxid : int) -> int :
+    if type(taxid) is not int : 
+        raise ValueError(f"Parameters must be a taxid")
+        
+    if taxid < 0:
+        raise ValueError(f"Taxid must be a positive integer or 0")
+
+    return(taxid)
+
+
+
+
+
+
 
 
 
