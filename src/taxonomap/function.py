@@ -1,6 +1,6 @@
 import requests
 from taxonomap.config import SOLR_BASE_TAXO
-
+from taxonomap.config import SOLR_BASE_ADDI
 
 def taxid_to_latin_name(taxid: int):
     """Convert taxid into scientific latin name"""
@@ -19,26 +19,17 @@ def taxid_to_latin_name(taxid: int):
             timeout=10
         )
         response.raise_for_status() 
-        
-        result = response.json()
-        docs = result["response"]["docs"]
-        
-        if not docs:
-            raise ValueError(f"No result found for taxid: {taxid}")
-        
-        return docs[0]["sci_name"][0]
-        
     except requests.RequestException as e:
-        raise Exception(f"API error: {str(e)}")
+        raise Exception(f"API error: {str(e)}")    
+    
+    result = response.json()
+    docs = result["response"]["docs"]
+    
+    if not docs:
+        raise ValueError(f"No result found for taxid: {taxid}")
+    
+    return docs[0]["sci_name"][0]
         
- 
-
-
-
-
-
-
-
 
 
 def latin_name_to_taxid(sci_name : str): 
@@ -68,6 +59,14 @@ def latin_name_to_taxid(sci_name : str):
 if __name__ == "__main__":
     print(taxid_to_latin_name(965))
     print(latin_name_to_taxid('Oceanospirillum'))
+
+
+
+
+
+
+
+
 
 
 
