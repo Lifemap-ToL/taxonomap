@@ -1,6 +1,6 @@
 import requests
-from taxonomap.config import SOLR_BASE_TAXO
-from taxonomap.config import SOLR_BASE_ADDI
+from config import SOLR_BASE_TAXO
+from config import SOLR_BASE_ADDI
 
 
 
@@ -135,9 +135,69 @@ def convert_taxid( taxid : int | str ) -> int:
         raise ValueError(f"taxid must be a positive integer or 0, got: {taxid}")
 
 
+import requests
+from config import SOLR_BASE_TAXO, SOLR_BASE_ADDI
 
 
 
+def get_MRCA_taxid(taxid1:int, taxid2:int):
+    
+
+    try:
+        response1 = requests.post(
+            SOLR_BASE_ADDI,
+            data={
+                "q": "*:*",
+                "fq": f"taxid:{taxid1}",
+                "fl": "ascend"
+            }
+        )        
+        response1.raise_for_status() 
+
+        response2 = requests.post(
+            SOLR_BASE_ADDI,
+            data={
+                "q": "*:*",
+                "fq": f"taxid:{taxid2}",
+                "fl": "ascend"
+            }
+        )
+        response2.raise_for_status()
+
+        result1 = response1.json()
+        docs1 = result1["response"]["docs"]
+
+        result2 = response2.json()
+        docs2 = result2["response"]["docs"]
+        
+        if len(docs1) == 0:
+            raise ValueError(f"No result found for taxid {taxid1}")
+        if len(docs2) == 0:
+            raise ValueError(f"No result found for taxid {taxid2}")
+        
+        # get ancestors list for each  
+        lineage1 = docs1[0]["ascend"]
+        lineage2 = docs2[0]["ascend"]
+
+        #transform in set to search it easily
+        common_ancestors = set(lineage1) & set(lineage2)
+        print(common_ancestors)
+
+        if len(common_ancestors) == 0:
+            raise ValueError(f"There are no common ancestor found for {taxid1} and {taxid2}")
+
+        #loop from the end (more specific to less)
+        for taxid in lineage1:
+            if taxid in common_ancestors:
+                return taxid
+
+        
+        raise ValueError("could not determine MRCA!") #supposedly it should never happen        
+
+   
+    
+    except requests.RequestException as e:
+            raise Exception(f"API error: {str(e)}")
 
 
 
@@ -148,6 +208,8 @@ if __name__ == "__main__":
     print(latin_name_to_taxid('Oceanospirillum'))
     print(get_all_ascendant(965))
     print(convert_taxid("965"))
+    mrca = get_MRCA_taxid(965,989)
+    print(f"MRCA of 965 and 989: {mrca}")
 
 
 
