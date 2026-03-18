@@ -40,6 +40,7 @@ def taxid_to_latin_name(taxid: int) -> str:
 
 
 
+
 def latin_name_to_taxid(sci_name : str) -> int: 
 
     response = requests.post(
@@ -67,20 +68,22 @@ def latin_name_to_taxid(sci_name : str) -> int:
 
 
 
+
 def get_all_ascendant( value: int | str ) -> list:
 
-    if type(value) is str :
+    if type(value) is str:
         if value == "":
             raise ValueError(f"Latin name cannot be empty")
         
-        value = latin_name_to_taxid(value)
+        try:
+            value = convert_taxid(value)
+        except ValueError:
+            value = latin_name_to_taxid(value)
 
-    valid_taxid(value)
-
+    convert_taxid(value)
 
     if value == 0:
         return []
-
 
     try:
         response = requests.post(
@@ -108,28 +111,29 @@ def get_all_ascendant( value: int | str ) -> list:
 
 
 
+
 def valid_taxid(taxid : int) -> int :
     if type(taxid) is not int : 
-        raise ValueError(f"Parameters must be a taxid")
+        raise ValueError(f"Parameters must be a taxid, got: {taxid}")
         
     if taxid < 0:
-        raise ValueError(f"Taxid must be a positive integer or 0")
-
+        raise ValueError(f"Taxid must be a positive integer or 0, got: {taxid}")
     return(taxid)
 
 
 def convert_taxid( taxid : int | str ) -> int:
-
     if type(taxid) is int:
-        return taxid
-    elif type(taxid) is str :
-        if type(int(taxid)) is int and int(taxid) >= 0:
-            return taxid
-        else :
-            raise ValueError(f"Taxid must be a positive integer or 0")
+        return valid_taxid(taxid)
+    if type(taxid) is str :
+        try:
+            taxid_int = int(taxid)
+            return valid_taxid(taxid_int)
+        except ValueError:
+            raise ValueError(f"taxid must be a valid integer, got: {taxid}")
     
     else:
-        raise ValueError(f"invalid type of parameters")
+        raise ValueError(f"taxid must be a positive integer or 0, got: {taxid}")
+
 
 
 
@@ -140,9 +144,9 @@ def convert_taxid( taxid : int | str ) -> int:
 
 #tests
 if __name__ == "__main__":
-    #print(taxid_to_latin_name(965))
-    #print(latin_name_to_taxid('Oceanospirillum'))
-    #print(get_all_ascendant(965))
+    print(taxid_to_latin_name(965))
+    print(latin_name_to_taxid('Oceanospirillum'))
+    print(get_all_ascendant(965))
     print(convert_taxid("965"))
 
 
