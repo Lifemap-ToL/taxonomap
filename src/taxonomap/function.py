@@ -5,10 +5,13 @@ from config import SOLR_BASE_ADDI
 
 
 
-def taxid_to_latin_name(taxid: int) -> str:
+def taxid_to_latin_name(taxid: int|str) -> str:
     """Convert taxid into scientific latin name"""
     
-    valid_taxid(taxid)
+    taxid = convert_taxid(taxid)
+
+    if taxid is None :
+        return taxid
 
     if taxid == 0:
         return "LUCA"
@@ -32,7 +35,8 @@ def taxid_to_latin_name(taxid: int) -> str:
     
     if not docs:
         raise ValueError(f"No result found for taxid: {taxid}")
-    
+
+
     return docs[0]["sci_name"][0]
         
 
@@ -80,7 +84,10 @@ def get_all_ascendant( value: int | str ) -> list:
         except ValueError:
             value = latin_name_to_taxid(value)
 
-    convert_taxid(value)
+    value = convert_taxid(value)
+
+    if value is None:
+        return value
 
     if value == 0:
         return []
@@ -118,7 +125,28 @@ def valid_taxid(taxid : int) -> int :
         
     if taxid < 0:
         raise ValueError(f"Taxid must be a positive integer or 0, got: {taxid}")
-    return(taxid)
+    
+    try:
+        response = requests.post(
+            SOLR_BASE_TAXO,
+            data={
+                "q": "*:*",
+                "fq": f"taxid:{taxid}",
+            },
+            timeout=10
+        )
+        response.raise_for_status() 
+
+    except requests.RequestException as e:
+        raise Exception(f"API error: {str(e)}")  
+
+    result = response.json()
+    docs = result["response"]["numFound"]
+    if docs == 0:
+        return None
+
+    return taxid
+
 
 
 def convert_taxid( taxid : int | str ) -> int:
@@ -133,11 +161,6 @@ def convert_taxid( taxid : int | str ) -> int:
     
     else:
         raise ValueError(f"taxid must be a positive integer or 0, got: {taxid}")
-
-
-import requests
-from config import SOLR_BASE_TAXO, SOLR_BASE_ADDI
-
 
 
 def get_MRCA_taxid(taxid1:int, taxid2:int):
