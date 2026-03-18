@@ -1,5 +1,5 @@
 import requests
-from taxonomap.config import SOLR_BASE_URL
+from taxonomap.config import SOLR_BASE_TAXO
 
 
 def taxid_to_latin_name(taxid: int):
@@ -10,7 +10,7 @@ def taxid_to_latin_name(taxid: int):
     
     try:
         response = requests.post(
-            SOLR_BASE_URL,
+            SOLR_BASE_TAXO,
             data={
                 "q": "*:*",
                 "fq": f"taxid:{taxid}",
@@ -45,7 +45,7 @@ def latin_name_to_taxid(sci_name : str):
 
     response = requests.post(
 
-    SOLR_BASE_URL,
+    SOLR_BASE_TAXO,
         data={"q": "*:*",
           "fq" : f"sci_name:{sci_name}",
             "fl": "taxid,sci_name"   
