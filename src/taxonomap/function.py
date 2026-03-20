@@ -1,6 +1,6 @@
 import requests
-from config import SOLR_BASE_TAXO
-from config import SOLR_BASE_ADDI
+from taxonomap.config import SOLR_BASE_TAXO
+from taxonomap.config import SOLR_BASE_ADDI
 
 
 
@@ -168,9 +168,6 @@ def get_MRCA_taxid(taxid1:int, taxid2:int):
     Finds the most recent common ancestor (MRCA) between two taxids.
     Input: taxid1, taxid2
     Output: taxid number of MRCA of the given taxids.
-    next upgrades: 
-        - return also the latin_name of the taxid by using existing function
-        - allowing more than 2 taxids to be searched
     """
 
 
