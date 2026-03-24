@@ -15,18 +15,18 @@ def taxid_to_latin_name(taxid: int|str) -> str:
     if taxid == 0:
         return "LUCA"
 
-    docs = query_taxo(fq=f"taxid:{taxid}", fl="sci_name")
+    docs = query_taxo(fq=f"taxid:{taxid}", fl="sci_name")["response"]["docs"]
 
     if not docs:
         raise ValueError(f"No result found for taxid: {taxid}")
 
-    return docs[0]["sci_name"][0]
+    return(docs[0]["sci_name"][0])
         
 
 
 def latin_name_to_taxid(sci_name : str) -> int: 
-    docs = query_taxo(fq=f"sci_name:{sci_name}", fl="taxid,sci_name", rows=100)
-    
+    docs = query_taxo(fq=f"sci_name:{sci_name}", fl="taxid,sci_name", rows=100)["response"]["docs"]
+
     #loop on query results to get the exact sci_name's taxid
     exact_matches = [doc for doc in docs if doc["sci_name"][0] == sci_name]
 
@@ -43,9 +43,9 @@ def latin_name_to_taxid(sci_name : str) -> int:
 
 
 #tests
-if __name__ == "__main__":
-    print(taxid_to_latin_name(965))
-    print(latin_name_to_taxid('Oceanospirillum'))
+#if __name__ == "__main__":
+    #print(taxid_to_latin_name(965))
+    #print(latin_name_to_taxid("Oceanospirillum"))
 
     # mrca = get_MRCA_taxid(965,989)
     # print(f"MRCA of 965 and 989: {mrca}")
