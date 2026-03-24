@@ -1,11 +1,9 @@
 import pytest
 
-from taxonomap.phylogeny import get_all_ascendant#, get_MRCA_taxid
+from taxonomap.phylogeny import get_all_ascendant  # , get_MRCA_taxid
 
 
-
-class Test_get_all_ascendant : 
-
+class Test_get_all_ascendant:
     def test_empty_latin_name(self):
         """Test with empty string"""
         with pytest.raises(ValueError):
@@ -23,14 +21,12 @@ class Test_get_all_ascendant :
         assert result != []
         assert result == [135620, 135619, 1236, 1224, 3379134, 2, 0]
 
-
     def test_valid_taxid(self):
         """Test with a correct taxid"""
         result = get_all_ascendant(965)
         assert isinstance(result, list)
         assert result != []
         assert result == [135620, 135619, 1236, 1224, 3379134, 2, 0]
-
 
 
 # class TestGetMRCA:
@@ -40,22 +36,3 @@ class Test_get_all_ascendant :
 #         # here : Oceanospirillum (965) and Oceanospirillum linum (966)
 #         mrca = get_MRCA_taxid(965, 966)
 #         assert mrca == 965  # the genus itsefl
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

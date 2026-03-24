@@ -1,39 +1,33 @@
-import requests
-from taxonomap.config import SOLR_BASE_TAXO
-from taxonomap.config import SOLR_BASE_ADDI
-from taxonomap.solr_request import query_taxo, query_addi
+from taxonomap.solr_request import query_taxo
 
-def valid_taxid(taxid : int) -> int :
-    if type(taxid) is not int : 
+
+def valid_taxid(taxid: int) -> int:
+    if type(taxid) is not int:
         raise ValueError(f"Parameters must be a taxid, got: {taxid}")
-        
+
     if taxid < 0:
         raise ValueError(f"Taxid must be a positive integer or 0, got: {taxid}")
-    
+
     docs = query_taxo(fq=f"taxid:{taxid}", fl=None)["response"]["numFound"]
-    
+
     if docs == 0:
         return None
-    
+
     return taxid
 
 
-
-def convert_taxid( taxid : int | str ) -> int:
+def convert_taxid(taxid: int | str) -> int:
     if type(taxid) is int:
         return valid_taxid(taxid)
-    if type(taxid) is str :
+    if type(taxid) is str:
         try:
             taxid_int = int(taxid)
             return valid_taxid(taxid_int)
         except ValueError:
             raise ValueError(f"taxid must be a valid integer, got: {taxid}")
-    
+
     else:
         raise ValueError(f"taxid must be a positive integer or 0, got: {taxid}")
 
 
-
-
 convert_taxid(9999999999)
-
