@@ -1,4 +1,4 @@
-from taxonomap.conversions import latin_name_to_taxid
+from taxonomap.conversions import latin_name_to_taxid, taxid_to_latin_name
 from taxonomap.solr_request import query_addi
 from taxonomap.utils.validation import convert_taxid
 
@@ -36,13 +36,12 @@ def get_all_ascendant( value: int | str ) -> list:
 
 
 
-def get_MRCA_taxid(*taxids:int) -> int : #en cours
+def get_MRCA_taxid(*taxids) :
     """
     Finds the most recent common ancestor (MRCA) between two taxids.
     Input: 2 or more taxids
-    Output: taxid number of MRCA of the given taxids.
+    Output: Dictionary containing the MRCA taxid number of the given taxids, and name of the MRCA taxid number.
     """
-    #to do : return sci names
     
     if len(taxids) < 2:
         raise ValueError("Need at least 2 taxids to find MRCA")
@@ -65,8 +64,10 @@ def get_MRCA_taxid(*taxids:int) -> int : #en cours
 
         for taxid in all_lineages[0]: # compare first lineage with common ancestors to find the first (common ancestors possibly in mixed order)
             if taxid in common_ancestors:
-                return taxid
-
+                return {
+                "taxid": taxid,
+                "name": taxid_to_latin_name(taxid)
+            }
         
         raise ValueError("could not determine MRCA!") #supposedly it should never happen        
 
