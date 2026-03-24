@@ -3,7 +3,7 @@ from taxonomap.config import SOLR_BASE_TAXO
 from taxonomap.config import SOLR_BASE_ADDI
 from taxonomap.solr_request import query_taxo, query_addi
 from taxonomap.utils.validation import convert_taxid
-
+from taxonomap.conversions import latin_name_to_taxid
 
 
 
@@ -27,7 +27,7 @@ def get_all_ascendant( value: int | str ) -> list:
     if value == 0:
         return []
 
-    docs = query_addi(fq=f"taxid:{value}", fl="ascend", rows=1)
+    docs = query_addi(fq=f"taxid:{value}", fl="ascend", rows=1)['response']["docs"][0]["ascend"]
 
     
     if not docs:
@@ -87,10 +87,7 @@ def get_all_ascendant( value: int | str ) -> list:
 
 #tests
 if __name__ == "__main__":
-    print(taxid_to_latin_name(965))
-    print(latin_name_to_taxid('Oceanospirillum'))
-    print(get_all_ascendant(965))
-    print(convert_taxid("965"))
+    print(get_all_ascendant("965"))
     
     # mrca = get_MRCA_taxid(965,989)
     # print(f"MRCA of 965 and 989: {mrca}")
