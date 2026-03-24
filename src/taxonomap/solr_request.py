@@ -14,7 +14,7 @@ def query_solr(base_url, fq, fl, rows=1):
         response.raise_for_status()
         result = response.json()
         
-        return result["response"]["docs"]
+        return result
     
     
     except requests.RequestException as e:
