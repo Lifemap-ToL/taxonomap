@@ -10,7 +10,7 @@ def valid_taxid(taxid : int) -> int :
     if taxid < 0:
         raise ValueError(f"Taxid must be a positive integer or 0, got: {taxid}")
     
-    docs = query_taxo(fq=f"taxid:{taxid}", fl="taxid", rows=1)
+    docs = query_taxo(fq=f"taxid:{taxid}", fl=None)["response"]["numFound"]
     
     if docs == 0:
         return None
@@ -31,4 +31,9 @@ def convert_taxid( taxid : int | str ) -> int:
     
     else:
         raise ValueError(f"taxid must be a positive integer or 0, got: {taxid}")
+
+
+
+
+convert_taxid(9999999999)
 
