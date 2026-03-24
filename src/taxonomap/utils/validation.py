@@ -1,4 +1,7 @@
-
+import requests
+from taxonomap.config import SOLR_BASE_TAXO
+from taxonomap.config import SOLR_BASE_ADDI
+from taxonomap.solr_request import query_taxo, query_addi
 
 def valid_taxid(taxid : int) -> int :
     if type(taxid) is not int : 

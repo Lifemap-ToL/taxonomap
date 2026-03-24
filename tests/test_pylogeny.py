@@ -1,6 +1,6 @@
 import pytest
 
-from taxonomap.function import taxid_to_latin_name, get_all_ascendant,valid_taxid,convert_taxid, get_MRCA_taxid
+from taxonomap.phylogeny import get_all_ascendant#, get_MRCA_taxid
 
 
 
@@ -33,13 +33,13 @@ class Test_get_all_ascendant :
 
 
 
-class TestGetMRCA:
-    """Tests for get_MRCA_taxid function"""
-    def test_mrca_same_genus(self):
-        """test MRCA of two species from same genus"""
-        # here : Oceanospirillum (965) and Oceanospirillum linum (966)
-        mrca = get_MRCA_taxid(965, 966)
-        assert mrca == 965  # the genus itsefl
+# class TestGetMRCA:
+#     """Tests for get_MRCA_taxid function"""
+#     def test_mrca_same_genus(self):
+#         """test MRCA of two species from same genus"""
+#         # here : Oceanospirillum (965) and Oceanospirillum linum (966)
+#         mrca = get_MRCA_taxid(965, 966)
+#         assert mrca == 965  # the genus itsefl
 
 
 

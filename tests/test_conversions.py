@@ -1,6 +1,6 @@
 import pytest
 
-from taxonomap.function import taxid_to_latin_name, get_all_ascendant,valid_taxid,convert_taxid, get_MRCA_taxid
+from taxonomap.conversions import taxid_to_latin_name
 
 class Test_taxid_to_latin_name : 
 

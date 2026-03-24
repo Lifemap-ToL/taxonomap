@@ -2,7 +2,7 @@ import requests
 from taxonomap.config import SOLR_BASE_TAXO
 from taxonomap.config import SOLR_BASE_ADDI
 from taxonomap.solr_request import query_taxo, query_addi
-from taonomap.validation import valid_taxid,convert_taxid
+from taxonomap.utils.validation import convert_taxid
 
 
 
