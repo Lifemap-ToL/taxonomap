@@ -16,6 +16,8 @@ def query_solr(base_url, fq, fl, rows=1):
         
         return result
     
+
+    
     
     except requests.RequestException as e:
         raise Exception(f"API error: {str(e)}")
