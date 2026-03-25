@@ -3,9 +3,7 @@ from taxonomap.solr_request import query_addi
 from taxonomap.utils.validation import convert_taxid
 
 
-
-
-def get_all_ascendant( value: int | str ) -> list:
+def get_all_ascendant(value: int | str) -> list:
     """
     Get the lineage (list of ancestors) for a given taxid or name.
 
@@ -30,10 +28,10 @@ def get_all_ascendant( value: int | str ) -> list:
     -------
     >>> get_all_ascendant(965)
     [135620, 135619, 1236, 1224, 3379134, 2, 0]
-    
+
     >>> get_all_ascendant("Oceanospirillum")
     [135620, 135619, 1236, 1224, 3379134, 2, 0]
-    
+
     >>> get_all_ascendant(0)
     []
 
@@ -42,7 +40,7 @@ def get_all_ascendant( value: int | str ) -> list:
     if type(value) is str:
         if value == "":
             raise ValueError(f"Latin name cannot be empty")
-        
+
         try:
             value = convert_taxid(value)
         except ValueError:
@@ -56,25 +54,61 @@ def get_all_ascendant( value: int | str ) -> list:
     if value == 0:
         return []
 
-    docs = query_addi(fq=f"taxid:{value}", fl="ascend", rows=1)['response']["docs"][0]["ascend"]
+    docs = query_addi(fq=f"taxid:{value}", fl="ascend", rows=1)["response"]["docs"][0][
+        "ascend"
+    ]
 
-    
     if not docs:
         raise ValueError(f"No result found for taxid: {value}")
-    
+
     return docs
 
 
-
-
-
-def get_MRCA_taxid(*taxids) :
+def get_MRCA_taxid(*taxids):
     """
-    Finds the most recent common ancestor (MRCA) between two taxids.
-    Input: 2 or more taxids
-    Output: Dictionary containing the MRCA taxid number of the given taxids, and name of the MRCA taxid number.
+    Find the Most Recent Common Ancestor (MRCA) of multiple taxids.
+
+    Parameters
+    --------
+    *taxids : int
+        Two or more NCBI taxonomy identifiers.
+
+    Returns
+    -------
+    dict
+        Dictionary containing:
+
+        - taxid : int
+            NCBI taxonomy ID of the MRCA
+        - name : str
+            Scientific name of the MRCA
+
+    Raises
+    -----
+    ValueError
+        If fewer than 2 taxids are provided.
+    ValueError
+        If a taxid is not found in the database.
+    ValueError
+        If no common ancestor exists between the provided taxids. (supposedly, never happens)
+
+    Examples
+    --------
+    Find MRCA of human and cat:
+
+    >>> mrca = get_MRCA_taxid(9606, 9685)
+    >>> print(mrca['name'])
+    'Boreoeutheria'
+
+    Notes
+    -----
+    The algorithm uses set intersection to find common ancestors,
+    then returns the most recent one by comparing the intersected
+    set to the first lineage - which is ordered from most recent
+    to oldest ancestor.
+
     """
-    
+
     if len(taxids) < 2:
         raise ValueError("Need at least 2 taxids to find MRCA")
 
@@ -82,35 +116,36 @@ def get_MRCA_taxid(*taxids) :
 
     for taxid in taxids:
         docs = query_addi(fq=f"taxid:{taxid}", fl="ascend")["response"]["docs"]
-        
+
         if not docs:
             raise ValueError(f"Taxid {taxid} not found")
 
-        lineage = docs[0]["ascend"] 
+        lineage = docs[0]["ascend"]
         all_lineages.append(lineage)
-    
-        common_ancestors = set(all_lineages[0]) #here contains ancestors of first lineage
+
+        common_ancestors = set(
+            all_lineages[0]
+        )  # here contains ancestors of first lineage
 
         for lineage in all_lineages[1:]:
-            common_ancestors &= set(lineage) #intersection of first set with all the others
+            common_ancestors &= set(
+                lineage
+            )  # intersection of first set with all the others
 
-        for taxid in all_lineages[0]: # compare first lineage with common ancestors to find the first (common ancestors possibly in mixed order)
+        for taxid in all_lineages[
+            0
+        ]:  # compare first lineage with common ancestors to find the first (common ancestors possibly in mixed order)
             if taxid in common_ancestors:
-                return {
-                "taxid": taxid,
-                "name": taxid_to_latin_name(taxid)
-            }
-        
-        raise ValueError("could not determine MRCA!") #supposedly it should never happen        
+                return {"taxid": taxid, "name": taxid_to_latin_name(taxid)}
 
-   
+        raise ValueError(
+            "could not determine MRCA!"
+        )  # supposedly it should never happen
 
 
-
-
-#tests
+# tests
 if __name__ == "__main__":
     print(get_all_ascendant("965"))
-    
+
     print(f"MRCA of 965, 989 : {get_MRCA_taxid(965, 989)}")
     print(f"MRCA of 9606, 9685, 10090: {get_MRCA_taxid(9606, 9685, 10090)}")
