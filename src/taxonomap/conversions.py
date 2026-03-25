@@ -3,7 +3,38 @@ from taxonomap.utils.validation import convert_taxid
 
 
 def taxid_to_latin_name(taxid: int | str) -> str:
-    """Convert taxid into scientific latin name"""
+    """
+    Convert NCBI taxid to scientific name
+
+    Parameters
+    ----------
+    taxid : int | str
+        NCBI taxonomy identifier. It can be provided as integer or string.
+
+    Returns
+    -------
+    str
+        Scientific name (for example : 'Homo sapiens').
+
+    Raises
+    ------
+    ValueError
+        If taxid is invalid or not found in database.
+
+    Examples
+    --------
+    >>> taxid_to_latin_name(9606)
+    'Homo sapiens'
+
+    >>> taxid_to_latin_name("965")
+    'Oceanospirillum'
+
+    Notes
+    -----
+    Taxid 0 returns 'LUCA' (Last Universal Common Ancestor).
+
+    """
+
     taxid = convert_taxid(taxid)
 
     if taxid is None:
@@ -20,6 +51,36 @@ def taxid_to_latin_name(taxid: int | str) -> str:
 
 
 def latin_name_to_taxid(sci_name: str) -> int:
+    """
+    Convert scientific name to NCBI taxid (the exact match).
+
+    Parameters
+    ----------
+    sci_name : str
+        Scientific name to search for (for example : 'Homo sapiens').
+        It has to be an exact match.
+
+    Returns
+    -------
+    int
+        NCBI taxonomy identifier.
+
+    Raises
+    ------
+    ValueError
+        If there is no exact match found for the provided input name.
+
+
+    Examples
+    --------
+    >>> latin_name_to_taxid("Homo sapiens")
+    9606
+    
+    >>> latin_name_to_taxid("Oceanospirillum")
+    965
+
+    """
+
     docs = query_taxo(fq=f"sci_name:{sci_name}", fl="taxid,sci_name", rows=100)[
         "response"
     ]["docs"]
