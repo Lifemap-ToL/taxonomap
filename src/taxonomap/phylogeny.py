@@ -6,6 +6,38 @@ from taxonomap.utils.validation import convert_taxid
 
 
 def get_all_ascendant( value: int | str ) -> list:
+    """
+    Get the lineage (list of ancestors) for a given taxid or name.
+
+    Parameters
+    --------
+    value : int | str
+        NCBI taxid (as int or string) or scientific name (string)
+
+    Returns
+    ------
+    list of int
+        List of ancestor taxids, orderd from the most recent parent to root.
+        Returns an empty list if value is 0 (root).
+        Returns None if taxid is not found in the taxonomy database
+
+    Raises
+    ------
+    ValueError
+        If scientific name is an empty string, or if taxid is not found.
+
+    Examples
+    -------
+    >>> get_all_ascendant(965)
+    [135620, 135619, 1236, 1224, 3379134, 2, 0]
+    
+    >>> get_all_ascendant("Oceanospirillum")
+    [135620, 135619, 1236, 1224, 3379134, 2, 0]
+    
+    >>> get_all_ascendant(0)
+    []
+
+    """
 
     if type(value) is str:
         if value == "":
