@@ -143,9 +143,61 @@ def get_MRCA_taxid(*taxids):
         )  # supposedly it should never happen
 
 
+def get_all_descendants(value: int | str) -> list:
+    """
+    Get all descendant taxids for a given taxid or name.
+
+    Parameters
+    ----------
+    value : int | str
+        NCBI taxid (as int or string) or scientific name (string)
+
+    Returns
+    -------
+    list of int
+        List of descendant taxids.
+
+    Examples
+    -------
+    >>> get_all_descendants(9682)
+    [9683, 9685, 9688, ...]
+
+    >>> get_all_descendants("Felis")
+    [9683, 9685, 9688, ...]
+    """
+
+    if type(value) is str:
+        if value == "":
+            raise ValueError("Latin name cannot be empty")
+        try:
+            value = convert_taxid(value)
+        except ValueError:
+            value = latin_name_to_taxid(value)
+
+    value = convert_taxid(value)
+
+    if value is None:
+        return value
+
+    docs = query_addi(
+ fq=f"ascend:{value}",
+        fl="taxid",
+        rows=1000000,
+    )["response"]["docs"]
+
+    return [d["taxid"][0] for d in docs]
+
+
+
+
+
+
+
+
 # tests
 if __name__ == "__main__":
     print(get_all_ascendant("965"))
 
     print(f"MRCA of 965, 989 : {get_MRCA_taxid(965, 989)}")
     print(f"MRCA of 9606, 9685, 10090: {get_MRCA_taxid(9606, 9685, 10090)}")
+    print(get_all_descendants(965))
