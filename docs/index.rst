@@ -1,14 +1,8 @@
-.. taxonomap documentation master file, created by
-   sphinx-quickstart on Thu Mar 26 13:52:41 2026.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Welcome to taxonomap's documentation!
+=====================================
 
-taxonomap documentation
-=======================
+taxonomap is a Python package for NCBI taxonomy manipulation, synchronised with Lifemap's Solr database.
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
 
 
 .. toctree::
