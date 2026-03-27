@@ -10,6 +10,16 @@ phylogeny.py :
 
 # FONCTIONS À CRÉER MODIFIER
 - [ ] get_descendants : Ajout options/autres fonctions pour retourner uniquement les feuilles, les siblings, direct children
+- [ ] Mutualiser des parties de get_descendants + get_ascendants (répétitions)
 - [ ] Créer une classe SolrRequest : méthode(s) d'exécution de requête, méthode(s) d'extraction des résultats
-- [ ] get_MRCA : Améliorer pour prendre une liste en input, et une seule requête Solr (pas une par taxid) 
+- [ ] get_MRCA : 
+	- [ ] Améliorer pour prendre une liste en input
+	- [ ] Une seule requête Solr (et non une par taxid) 
+	- [ ] Vérification #taxid = #documents
+
+- [ ] Afficher la version de la taxonomie utilisée (?)
+- [ ] validation.py : Créer une fonction qui vérifie les listes en entrées, et pour chaque taxid de la liste vérifie : 
+	- que c'est soit une str soit un int
+	- si c'est une str, la convertit en int
+	- vérifie qu'il s'agit d'un entier positif
 
