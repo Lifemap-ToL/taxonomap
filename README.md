@@ -1,2 +1,9 @@
--> créer des classes
--> corriger la fonction MRCA 
+# FONCTIONS EXISTANTES
+[X] BLABLAL
+
+
+# FONCTIONS À CRÉER MODIFIER
+[ ] créer des classes
+
+[ ]corriger la fonction MRCA 
+
