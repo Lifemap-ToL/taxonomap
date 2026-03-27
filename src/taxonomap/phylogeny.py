@@ -64,7 +64,7 @@ def get_all_ascendant(value: int | str) -> list:
     return docs
 
 
-def get_MRCA_taxid(*taxids):
+def get_MRCA(*taxids):
     """
     Find the Most Recent Common Ancestor (MRCA) of multiple taxids.
 
@@ -116,25 +116,20 @@ def get_MRCA_taxid(*taxids):
 
     for taxid in taxids:
         docs = query_addi(fq=f"taxid:{taxid}", fl="ascend")["response"]["docs"]
-
         if not docs:
             raise ValueError(f"Taxid {taxid} not found")
 
         lineage = docs[0]["ascend"]
         all_lineages.append(lineage)
 
-        common_ancestors = set(
-            all_lineages[0]
-        )  # here contains ancestors of first lineage
+        lineages_sets = [set(lineage) for lineage in all_lineages]
+        common_ancestors = set.intersection(*lineages_sets)
+        #print(common_ancestors)
 
-        for lineage in all_lineages[1:]:
-            common_ancestors &= set(
-                lineage
-            )  # intersection of first set with all the others
-
-        for taxid in all_lineages[
-            0
-        ]:  # compare first lineage with common ancestors to find the first (common ancestors possibly in mixed order)
+        if not common_ancestors:
+            raise ValueError("No common ancestor found!")
+        
+        for taxid in all_lineages[0]:
             if taxid in common_ancestors:
                 return {"taxid": taxid, "name": taxid_to_latin_name(taxid)}
 
@@ -196,8 +191,7 @@ def get_all_descendants(value: int | str) -> list:
 
 # tests
 if __name__ == "__main__":
-    print(get_all_ascendant("965"))
-
-    print(f"MRCA of 965, 989 : {get_MRCA_taxid(965, 989)}")
-    print(f"MRCA of 9606, 9685, 10090: {get_MRCA_taxid(9606, 9685, 10090)}")
-    print(get_all_descendants(965))
+    #print(get_all_ascendant("965"))
+    #print(f"MRCA of 965, 989 : {get_MRCA(965, 989)}")
+    print(f"MRCA of 9606, 9685, 10090: {get_MRCA(9606, 9685, 10090)}")
+    #print(get_all_descendants(965))
