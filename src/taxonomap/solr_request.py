@@ -1,6 +1,6 @@
 import requests
 
-from .config import SOLR_BASE_ADDI, SOLR_BASE_TAXO
+from taxonomap.config import SOLR_BASE_ADDI, SOLR_BASE_TAXO
 
 
 def query_solr(base_url, fq, fl, rows=1):

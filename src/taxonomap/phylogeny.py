@@ -3,7 +3,7 @@ from taxonomap.solr_request import query_addi
 from taxonomap.utils.validation import convert_taxid
 
 
-def get_all_ascendant(value: int | str) -> list:
+def get_ascendant(value: int | str) -> list:
     """
     Get the lineage (list of ancestors) for a given taxid or name.
 
@@ -96,7 +96,7 @@ def get_MRCA(*taxids):
     --------
     Find MRCA of human and cat:
 
-    >>> mrca = get_MRCA_taxid(9606, 9685)
+    >>> mrca = get_MRCA(9606, 9685)
     >>> print(mrca['name'])
     'Boreoeutheria'
 
@@ -122,23 +122,21 @@ def get_MRCA(*taxids):
         lineage = docs[0]["ascend"]
         all_lineages.append(lineage)
 
-        lineages_sets = [set(lineage) for lineage in all_lineages]
-        common_ancestors = set.intersection(*lineages_sets)
-        #print(common_ancestors)
+    lineages_sets = [set(lineage) for lineage in all_lineages]
+    common_ancestors = set.intersection(*lineages_sets)
+    #print(common_ancestors)
 
-        if not common_ancestors:
-            raise ValueError("No common ancestor found!")
+    if not common_ancestors:
+        raise ValueError("No common ancestor found!")
         
-        for taxid in all_lineages[0]:
-            if taxid in common_ancestors:
-                return {"taxid": taxid, "name": taxid_to_latin_name(taxid)}
+    for taxid in all_lineages[0]:
+        if taxid in common_ancestors:
+            return {"taxid": taxid, "name": taxid_to_latin_name(taxid)}
 
-        raise ValueError(
-            "could not determine MRCA!"
-        )  # supposedly it should never happen
+    raise ValueError("could not determine MRCA!")  # supposedly it should never happen
 
 
-def get_all_descendants(value: int | str) -> list:
+def get_descendants(value: int | str) -> list:
     """
     Get all descendant taxids for a given taxid or name.
 
