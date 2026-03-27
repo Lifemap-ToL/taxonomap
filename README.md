@@ -4,5 +4,5 @@
 
 # FONCTIONS À CRÉER MODIFIER
 - [ ] créer des classes
-- [ ]corriger la fonction MRCA 
+- [ ] corriger la fonction MRCA 
 
