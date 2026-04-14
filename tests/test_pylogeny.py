@@ -1,29 +1,29 @@
 import pytest
 
-from taxonomap.phylogeny import get_all_ascendant  # , get_MRCA_taxid
+from taxonomap.phylogeny import get_ascendant  # , get_MRCA_taxid
 
 
 class Test_get_all_ascendant:
     def test_empty_latin_name(self):
         """Test with empty string"""
         with pytest.raises(ValueError):
-            get_all_ascendant("")
+            get_ascendant("")
 
     def test_negative_taxid(self):
         """Test with negative integer integer"""
         with pytest.raises(ValueError):
-            get_all_ascendant(-4)
+            get_ascendant(-4)
 
     def test_valid_latin_name(self):
         """Test with a correct latin name"""
-        result = get_all_ascendant("Oceanospirillum")
+        result = get_ascendant("Oceanospirillum")
         assert isinstance(result, list)
         assert result != []
         assert result == [135620, 135619, 1236, 1224, 3379134, 2, 0]
 
     def test_valid_taxid(self):
         """Test with a correct taxid"""
-        result = get_all_ascendant(965)
+        result = get_ascendant(965)
         assert isinstance(result, list)
         assert result != []
         assert result == [135620, 135619, 1236, 1224, 3379134, 2, 0]
