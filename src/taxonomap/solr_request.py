@@ -25,3 +25,11 @@ class SolrClient:
 
     def query_addi(self, fq, fl, rows=1):
         return self.query(SOLR_BASE_ADDI, fq, fl, rows)
+
+    def result_get_ascendant(self,result):
+        docs = result["response"]["docs"][0]["ascend"]
+        return docs
+    
+    def result_get_descendant(self, result):
+        docs = result["response"]["docs"]
+        return [d["taxid"][0] for d in docs]

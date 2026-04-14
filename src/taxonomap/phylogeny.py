@@ -56,9 +56,7 @@ def get_ascendant(value: int | str) -> list:
     if value == 0:
         return []
 
-    docs = client.query_addi(fq=f"taxid:{value}", fl="ascend", rows=1)["response"]["docs"][0][
-        "ascend"
-    ]
+    docs = client.result_get_ascendant(client.query_addi(fq=f"taxid:{value}", fl="ascend", rows=1))
 
     if not docs:
         raise ValueError(f"No result found for taxid: {value}")
@@ -174,13 +172,10 @@ def get_descendants(value: int | str) -> list:
     if value is None:
         return value
 
-    docs = client.query_addi(
- fq=f"ascend:{value}",
-        fl="taxid",
-        rows=1000000,
-    )["response"]["docs"]
+    docs = client.result_get_descendant(client.query_addi(
+            fq=f"ascend:{value}", fl="taxid",rows=1000000))
 
-    return [d["taxid"][0] for d in docs]
+    return docs
 
 
 
@@ -190,8 +185,8 @@ def get_descendants(value: int | str) -> list:
 
 
 # tests
-if __name__ == "__main__":
-    #print(get_all_ascendant("965"))
-    #print(f"MRCA of 965, 989 : {get_MRCA(965, 989)}")
-    print(f"MRCA of 9606, 9685, 10090: {get_MRCA(9606, 9685, 10090)}")
-    #print(get_all_descendants(965))
+# if __name__ == "__main__":
+#     print(get_ascendant("965"))
+#     print(f"MRCA of 965, 989 : {get_MRCA(965, 989)}")
+#     print(f"MRCA of 9606, 9685, 10090: {get_MRCA(9606, 9685, 10090)}")
+#     print(get_descendants(965))
