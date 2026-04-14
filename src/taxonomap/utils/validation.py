@@ -1,5 +1,6 @@
-from taxonomap.solr_request import query_taxo
+from taxonomap.solr_request import SolrClient
 
+client = SolrClient()
 
 def valid_taxid(taxid: int) -> int:
     """
@@ -35,7 +36,7 @@ def valid_taxid(taxid: int) -> int:
     if taxid < 0:
         raise ValueError(f"Taxid must be a positive integer or 0, got: {taxid}")
 
-    docs = query_taxo(fq=f"taxid:{taxid}", fl=None)["response"]["numFound"]
+    docs = client.query_taxo(fq=f"taxid:{taxid}", fl=None)["response"]["numFound"]
 
     if docs == 0:
         return None
