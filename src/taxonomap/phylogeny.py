@@ -1,6 +1,6 @@
-from taxonomap.conversions import latin_name_to_taxid, taxid_to_latin_name
+from taxonomap.conversions import taxid_to_latin_name, resolve_value
 from taxonomap.solr_request import SolrClient
-from taxonomap.utils.validation import convert_taxid
+
 
 client = SolrClient()
 
@@ -39,16 +39,7 @@ def get_ascendant(value: int | str) -> list:
 
     """
 
-    if type(value) is str:
-        if value == "":
-            raise ValueError(f"Latin name cannot be empty")
-
-        try:
-            value = convert_taxid(value)
-        except ValueError:
-            value = latin_name_to_taxid(value)
-
-    value = convert_taxid(value)
+    value = resolve_value(value)
 
     if value is None:
         return value
@@ -62,6 +53,76 @@ def get_ascendant(value: int | str) -> list:
         raise ValueError(f"No result found for taxid: {value}")
 
     return docs
+
+
+def get_descendants(value: int | str) -> list:
+    """
+    Get all descendant taxids for a given taxid or name.
+
+    Parameters
+    ----------
+    value : int | str
+        NCBI taxid (as int or string) or scientific name (string)
+
+    Returns
+    -------
+    list of int
+        List of descendant taxids.
+
+    Examples
+    -------
+    >>> get_all_descendants(9682)
+    [9683, 9685, 9688, ...]
+
+    >>> get_all_descendants("Felis")
+    [9683, 9685, 9688, ...]
+    """
+
+    value = resolve_value(value)
+
+    if value is None:
+        return value
+
+    docs = client.result_get_descendant(client.query_addi(
+            fq=f"ascend:{value}", fl="taxid",rows=1000000))
+
+    return docs
+
+
+def get_tips(value: int | str) -> list:
+    value = resolve_value(value)
+
+    if value is None:
+        return value
+
+    # Récupérer tous les descendants
+    descendants = client.result_get_descendant(
+        client.query_addi(fq=f"ascend:{value}", fl="taxid", rows=1000000)
+    )
+
+    # Garder uniquement les feuilles
+    tips = []
+    for taxid in descendants:
+        result = client.query_taxo(fq=f"taxid:{taxid}", fl="nbdesc")
+        nbdesc = client.result_get_nbdesc(result)
+        if nbdesc == 1:  
+            tips.append(taxid)
+
+    return tips
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def get_MRCA(*taxids):
@@ -136,53 +197,6 @@ def get_MRCA(*taxids):
     raise ValueError("could not determine MRCA!")  # supposedly it should never happen
 
 
-def get_descendants(value: int | str) -> list:
-    """
-    Get all descendant taxids for a given taxid or name.
-
-    Parameters
-    ----------
-    value : int | str
-        NCBI taxid (as int or string) or scientific name (string)
-
-    Returns
-    -------
-    list of int
-        List of descendant taxids.
-
-    Examples
-    -------
-    >>> get_all_descendants(9682)
-    [9683, 9685, 9688, ...]
-
-    >>> get_all_descendants("Felis")
-    [9683, 9685, 9688, ...]
-    """
-
-    if type(value) is str:
-        if value == "":
-            raise ValueError("Latin name cannot be empty")
-        try:
-            value = convert_taxid(value)
-        except ValueError:
-            value = latin_name_to_taxid(value)
-
-    value = convert_taxid(value)
-
-    if value is None:
-        return value
-
-    docs = client.result_get_descendant(client.query_addi(
-            fq=f"ascend:{value}", fl="taxid",rows=1000000))
-
-    return docs
-
-
-
-
-
-
-
 
 # tests
 # if __name__ == "__main__":
@@ -190,3 +204,4 @@ def get_descendants(value: int | str) -> list:
 #     print(f"MRCA of 965, 989 : {get_MRCA(965, 989)}")
 #     print(f"MRCA of 9606, 9685, 10090: {get_MRCA(9606, 9685, 10090)}")
 #     print(get_descendants(965))
+    # print(get_tisps(2953757))

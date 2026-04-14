@@ -1,5 +1,7 @@
 from taxonomap.solr_request import SolrClient
 
+
+
 client = SolrClient()
 
 def valid_taxid(taxid: int) -> int:
@@ -87,3 +89,5 @@ def convert_taxid(taxid: int | str) -> int:
 
 
 convert_taxid(9999999999)
+
+

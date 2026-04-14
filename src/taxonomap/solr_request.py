@@ -33,3 +33,7 @@ class SolrClient:
     def result_get_descendant(self, result):
         docs = result["response"]["docs"]
         return [d["taxid"][0] for d in docs]
+    
+    def result_get_nbdesc(self, result):
+        docs = result['response']['docs'][0]['nbdesc'][0]
+        return docs

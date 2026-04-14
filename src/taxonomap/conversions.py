@@ -95,6 +95,20 @@ def latin_name_to_taxid(sci_name: str) -> int:
     return exact_matches[0]["taxid"][0]
 
 
+def resolve_value(value):
+    if type(value) is str:
+        if value == "":
+            raise ValueError("Latin name cannot be empty")
+        try:
+            value = convert_taxid(value)
+        except ValueError:
+            value = latin_name_to_taxid(value)
+    return convert_taxid(value)
+
+
+
+
+
 # tests
 # if __name__ == "__main__":
 # print(taxid_to_latin_name(965))
