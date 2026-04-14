@@ -1,6 +1,7 @@
-from taxonomap.solr_request import query_taxo
+from taxonomap.solr_request import SolrClient
 from taxonomap.utils.validation import convert_taxid
 
+client = SolrClient()
 
 def taxid_to_latin_name(taxid: int | str) -> str:
     """
@@ -42,7 +43,7 @@ def taxid_to_latin_name(taxid: int | str) -> str:
     if taxid == 0:
         return "LUCA"
 
-    docs = query_taxo(fq=f"taxid:{taxid}", fl="sci_name")["response"]["docs"]
+    docs = client.query_taxo(fq=f"taxid:{taxid}", fl="sci_name")["response"]["docs"]
 
     if not docs:
         raise ValueError(f"No result found for taxid: {taxid}")
@@ -81,7 +82,7 @@ def latin_name_to_taxid(sci_name: str) -> int:
 
     """
 
-    docs = query_taxo(fq=f"sci_name:{sci_name}", fl="taxid,sci_name", rows=100)[
+    docs = client.query_taxo(fq=f"sci_name:{sci_name}", fl="taxid,sci_name", rows=100)[
         "response"
     ]["docs"]
 

@@ -1,6 +1,8 @@
 from taxonomap.conversions import latin_name_to_taxid, taxid_to_latin_name
-from taxonomap.solr_request import query_addi
+from taxonomap.solr_request import SolrClient
 from taxonomap.utils.validation import convert_taxid
+
+client = SolrClient()
 
 
 def get_ascendant(value: int | str) -> list:
@@ -54,7 +56,7 @@ def get_ascendant(value: int | str) -> list:
     if value == 0:
         return []
 
-    docs = query_addi(fq=f"taxid:{value}", fl="ascend", rows=1)["response"]["docs"][0][
+    docs = client.query_addi(fq=f"taxid:{value}", fl="ascend", rows=1)["response"]["docs"][0][
         "ascend"
     ]
 
@@ -115,7 +117,7 @@ def get_MRCA(*taxids):
     all_lineages = []
 
     for taxid in taxids:
-        docs = query_addi(fq=f"taxid:{taxid}", fl="ascend")["response"]["docs"]
+        docs = client.query_addi(fq=f"taxid:{taxid}", fl="ascend")["response"]["docs"]
         if not docs:
             raise ValueError(f"Taxid {taxid} not found")
 
@@ -172,7 +174,7 @@ def get_descendants(value: int | str) -> list:
     if value is None:
         return value
 
-    docs = query_addi(
+    docs = client.query_addi(
  fq=f"ascend:{value}",
         fl="taxid",
         rows=1000000,
