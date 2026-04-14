@@ -90,17 +90,18 @@ def get_descendants(value: int | str) -> list:
 
 
 def get_tips(value: int | str) -> list:
+    """
+    Récupère les feuilles d'un noeud (lent)
+    """
     value = resolve_value(value)
 
     if value is None:
         return value
 
-    # Récupérer tous les descendants
     descendants = client.result_get_descendant(
         client.query_addi(fq=f"ascend:{value}", fl="taxid", rows=1000000)
     )
 
-    # Garder uniquement les feuilles
     tips = []
     for taxid in descendants:
         result = client.query_taxo(fq=f"taxid:{taxid}", fl="nbdesc")
@@ -109,6 +110,32 @@ def get_tips(value: int | str) -> list:
             tips.append(taxid)
 
     return tips
+
+
+def get_children(value: int | str) -> list:
+    value = resolve_value(value)
+
+    if value is None:
+        return value
+
+    result = client.query_addi(fq=f"ascend:{value}", fl="taxid,ascend", rows=1000000)
+    return client.result_get_children(result, value)
+
+
+def get_siblings(value: int | str) -> list:
+    value = resolve_value(value)
+
+    if value is None:
+        return value
+
+    result = client.query_addi(fq=f"taxid:{value}", fl="ascend", rows=1)
+    parent = client.result_get_parent(result)
+
+    siblings = get_children(parent)
+    siblings = [s for s in siblings if s != value]
+
+    return siblings
+
 
 
 
@@ -197,11 +224,14 @@ def get_MRCA(*taxids):
     raise ValueError("could not determine MRCA!")  # supposedly it should never happen
 
 
+#tests
+#if __name__ == "__main__":
+    # print(get_ascendant("965"))
+    # print(f"MRCA of 965, 989 : {get_MRCA(965, 989)}")
+    # print(f"MRCA of 9606, 9685, 10090: {get_MRCA(9606, 9685, 10090)}")
+    # print(get_descendants(965))
+    # print(get_tips(2953757))
+    #print(get_children(130975))
+    #print(get_siblings(184512))
 
-# tests
-# if __name__ == "__main__":
-#     print(get_ascendant("965"))
-#     print(f"MRCA of 965, 989 : {get_MRCA(965, 989)}")
-#     print(f"MRCA of 9606, 9685, 10090: {get_MRCA(9606, 9685, 10090)}")
-#     print(get_descendants(965))
-    # print(get_tisps(2953757))
+

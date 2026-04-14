@@ -37,3 +37,9 @@ class SolrClient:
     def result_get_nbdesc(self, result):
         docs = result['response']['docs'][0]['nbdesc'][0]
         return docs
+    def result_get_children(self, result, parent_taxid):
+        docs = result["response"]["docs"]
+        return [doc["taxid"][0] for doc in docs if doc["ascend"][0] == parent_taxid]
+
+    def result_get_parent(self, result):
+        return result["response"]["docs"][0]["ascend"][0]
