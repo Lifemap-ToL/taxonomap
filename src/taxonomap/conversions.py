@@ -3,6 +3,7 @@ from taxonomap.utils.validation import convert_taxid
 
 client = SolrClient()
 
+
 def taxid_to_latin_name(taxid: int | str) -> str:
     """
     Convert NCBI taxid to scientific name
@@ -76,7 +77,7 @@ def latin_name_to_taxid(sci_name: str) -> int:
     --------
     >>> latin_name_to_taxid("Homo sapiens")
     9606
-    
+
     >>> latin_name_to_taxid("Oceanospirillum")
     965
 
@@ -104,9 +105,6 @@ def resolve_value(value):
         except ValueError:
             value = latin_name_to_taxid(value)
     return convert_taxid(value)
-
-
-
 
 
 # tests

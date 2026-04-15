@@ -9,9 +9,9 @@ phylogeny.py :
 		
 
 # FONCTIONS À CRÉER MODIFIER
-- [ ] get_descendants : Ajout options/autres fonctions pour retourner uniquement les feuilles, les siblings, direct children
-- [ ] Mutualiser des parties de get_descendants + get_ascendants (répétitions)
-- [ ] Créer une classe SolrRequest : méthode(s) d'exécution de requête, méthode(s) d'extraction des résultats
+- [X] get_descendants : Ajout options/autres fonctions pour retourner uniquement les feuilles, les siblings, direct children
+- [] Mutualiser des parties de get_descendants + get_ascendants (répétitions)
+- [X] Créer une classe SolrRequest : méthode(s) d'exécution de requête, méthode(s) d'extraction des résultats
 - [ ] get_MRCA : 
 	- [ ] Améliorer pour prendre une liste en input
 	- [ ] Une seule requête Solr (et non une par taxid) 

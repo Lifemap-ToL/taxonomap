@@ -1,8 +1,8 @@
 from taxonomap.solr_request import SolrClient
 
 
-
 client = SolrClient()
+
 
 def valid_taxid(taxid: int) -> int:
     """
@@ -27,7 +27,7 @@ def valid_taxid(taxid: int) -> int:
     --------
     >>> valid_taxid(9606)
     9606
-    
+
     >>> valid_taxid(999999999)
     None
     """
@@ -68,10 +68,10 @@ def convert_taxid(taxid: int | str) -> int:
     --------
     >>> convert_taxid(9606)
     9606
-    
+
     >>> convert_taxid("9606")
     9606
-    
+
     >>> convert_taxid("invalid")
     ValueError: Invalid taxid
     """
@@ -89,5 +89,3 @@ def convert_taxid(taxid: int | str) -> int:
 
 
 convert_taxid(9999999999)
-
-

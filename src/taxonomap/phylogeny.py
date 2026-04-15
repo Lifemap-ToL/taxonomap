@@ -47,7 +47,9 @@ def get_ascendant(value: int | str) -> list:
     if value == 0:
         return []
 
-    docs = client.result_get_ascendant(client.query_addi(fq=f"taxid:{value}", fl="ascend", rows=1))
+    docs = client.result_get_ascendant(
+        client.query_addi(fq=f"taxid:{value}", fl="ascend", rows=1)
+    )
 
     if not docs:
         raise ValueError(f"No result found for taxid: {value}")
@@ -83,8 +85,9 @@ def get_descendants(value: int | str) -> list:
     if value is None:
         return value
 
-    docs = client.result_get_descendant(client.query_addi(
-            fq=f"ascend:{value}", fl="taxid",rows=1000000))
+    docs = client.result_get_descendant(
+        client.query_addi(fq=f"ascend:{value}", fl="taxid", rows=1000000)
+    )
 
     return docs
 
@@ -106,7 +109,7 @@ def get_tips(value: int | str) -> list:
     for taxid in descendants:
         result = client.query_taxo(fq=f"taxid:{taxid}", fl="nbdesc")
         nbdesc = client.result_get_nbdesc(result)
-        if nbdesc == 1:  
+        if nbdesc == 1:
             tips.append(taxid)
 
     return tips
@@ -135,21 +138,6 @@ def get_siblings(value: int | str) -> list:
     siblings = [s for s in siblings if s != value]
 
     return siblings
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def get_MRCA(*taxids):
@@ -212,11 +200,11 @@ def get_MRCA(*taxids):
 
     lineages_sets = [set(lineage) for lineage in all_lineages]
     common_ancestors = set.intersection(*lineages_sets)
-    #print(common_ancestors)
+    # print(common_ancestors)
 
     if not common_ancestors:
         raise ValueError("No common ancestor found!")
-        
+
     for taxid in all_lineages[0]:
         if taxid in common_ancestors:
             return {"taxid": taxid, "name": taxid_to_latin_name(taxid)}
@@ -224,14 +212,12 @@ def get_MRCA(*taxids):
     raise ValueError("could not determine MRCA!")  # supposedly it should never happen
 
 
-#tests
-#if __name__ == "__main__":
-    # print(get_ascendant("965"))
-    # print(f"MRCA of 965, 989 : {get_MRCA(965, 989)}")
-    # print(f"MRCA of 9606, 9685, 10090: {get_MRCA(9606, 9685, 10090)}")
-    # print(get_descendants(965))
-    # print(get_tips(2953757))
-    #print(get_children(130975))
-    #print(get_siblings(184512))
-
-
+# tests
+# if __name__ == "__main__":
+# print(get_ascendant("965"))
+# print(f"MRCA of 965, 989 : {get_MRCA(965, 989)}")
+# print(f"MRCA of 9606, 9685, 10090: {get_MRCA(9606, 9685, 10090)}")
+# print(get_descendants(965))
+# print(get_tips(2953757))
+# print(get_children(130975))
+# print(get_siblings(184512))
