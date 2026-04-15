@@ -41,7 +41,7 @@ def taxid_to_latin_name(taxid: int | str | list) -> list:
     if isinstance(taxid, list):
         results = []
         for t in taxid:
-            latin_name = taxid_to_latin_name()
+            latin_name = taxid_to_latin_name(t)
             results.append(latin_name)
         return results
 
