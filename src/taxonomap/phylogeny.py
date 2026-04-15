@@ -94,7 +94,27 @@ def get_descendants(value: int | str) -> list:
 
 def get_tips(value: int | str) -> list:
     """
-    Récupère les feuilles d'un noeud (lent)
+    Get all terminal (leaf) taxids for a given taxid or name.
+
+    A tip is a taxon with no descendants (nbdesc == 1).
+
+    Parameters
+    ----------
+    value : int | str
+        NCBI taxid (as int or string) or scientific name (string)
+
+    Returns
+    -------
+    list of int
+        List of terminal (leaf) taxids.
+
+    Examples
+    -------
+    >>> get_tips(9682)
+    [9683, 9685, 9688, ...]
+
+    >>> get_tips("Felis")
+    [9683, 9685, 9688, ...]
     """
     value = resolve_value(value)
 
@@ -116,6 +136,27 @@ def get_tips(value: int | str) -> list:
 
 
 def get_children(value: int | str) -> list:
+    """
+    Get the direct children taxids for a given taxid or name.
+
+    Parameters
+    ----------
+    value : int | str
+        NCBI taxid (as int or string) or scientific name (string)
+
+    Returns
+    -------
+    list of int
+        List of direct children taxids.
+
+    Examples
+    -------
+    >>> get_children(9682)
+    [9683, 9685]
+
+    >>> get_children("Felis")
+    [9683, 9685]
+    """
     value = resolve_value(value)
 
     if value is None:
@@ -126,6 +167,31 @@ def get_children(value: int | str) -> list:
 
 
 def get_siblings(value: int | str) -> list:
+    """
+    Get the sibling taxids for a given taxid or name.
+
+    Siblings are the other children of the parent taxon,
+    excluding the given taxon itself.
+
+    Parameters
+    ----------
+    value : int | str
+        NCBI taxid (as int or string) or scientific name (string)
+
+    Returns
+    -------
+    list of int
+        List of sibling taxids.
+
+    Examples
+    -------
+    >>> get_siblings(9685)
+    [9683, 9688, ...]
+
+    >>> get_siblings("Felis catus")
+    [9683, 9688, ...]
+    """
+
     value = resolve_value(value)
 
     if value is None:
