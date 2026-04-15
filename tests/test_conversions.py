@@ -7,7 +7,7 @@ class Test_taxid_to_latin_name:
     def test_valid_type_string(self):
         """Test with string instead ofa integer"""
         result = taxid_to_latin_name("965")
-        assert result == "Oceanospirillum"
+        assert result == ["Oceanospirillum"]
 
     def test_invalid_type_float(self):
         """Test with float instead of a integer"""
@@ -24,9 +24,19 @@ class Test_taxid_to_latin_name:
         result = taxid_to_latin_name(965)
         assert result is not str
         assert len(result) > 0
-        assert result == "Oceanospirillum"
+        assert result == ["Oceanospirillum"]
 
     def test_invalid_taxid(self):
         """Test with a non-existing taxid"""
-        result = taxid_to_latin_name(9999999999999)
-        assert result == None
+        with pytest.raises(ValueError, match="Invalid taxid"):
+            taxid_to_latin_name(9999999999999)
+
+    def test_list_multiple_taxids(self):
+        """Test with a list of taxids"""
+        result = taxid_to_latin_name([9606, 965, 0])
+        assert result == ["Homo sapiens", "Oceanospirillum", "LUCA"]
+    
+    def test_luca_zero(self):
+        """Test with taxid 0 (LUCA)"""
+        result = taxid_to_latin_name(0)
+        assert result == ["LUCA"]
