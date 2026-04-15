@@ -4,19 +4,20 @@ from taxonomap.utils.validation import convert_taxid
 client = SolrClient()
 
 
-def taxid_to_latin_name(taxid: int | str) -> str:
+def taxid_to_latin_name(taxid: int | str | list) -> list:
     """
     Convert NCBI taxid to scientific name
 
     Parameters
     ----------
-    taxid : int | str
-        NCBI taxonomy identifier. It can be provided as integer or string.
+    taxid : int | str | list
+        NCBI taxonomy identifier(s). It can be provided as integer, a string, or a list.
+        The function transforms any type of input into a list.
 
     Returns
     -------
-    str
-        Scientific name (for example : 'Homo sapiens').
+    list
+        Returns a list of scientific names (for example : 'Homo sapiens'), even for a single input
 
     Raises
     ------
@@ -36,6 +37,13 @@ def taxid_to_latin_name(taxid: int | str) -> str:
     Taxid 0 returns 'LUCA' (Last Universal Common Ancestor).
 
     """
+
+    if isinstance(taxid, list):
+        results = []
+        for t in taxid:
+            latin_name = taxid_to_latin_name()
+            results.append(latin_name)
+        return results
 
     taxid = convert_taxid(taxid)
 
@@ -108,9 +116,11 @@ def resolve_value(value):
 
 
 # tests
-# if __name__ == "__main__":
+if __name__ == "__main__":
 # print(taxid_to_latin_name(965))
 # print(latin_name_to_taxid("Oceanospirillum"))
 
 # mrca = get_MRCA_taxid(965,989)
 # print(f"MRCA of 965 and 989: {mrca}")
+    print("test élément int seul:", taxid_to_latin_name(9606))
+    print("test pour une liste:", taxid_to_latin_name([9606, 965, 0]))
