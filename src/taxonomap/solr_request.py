@@ -45,3 +45,13 @@ class SolrClient:
 
     def result_get_parent(self, result):
         return result["response"]["docs"][0]["ascend"][0]
+
+    def query_taxo_multiple(self, taxids, fl):
+        """Query multiple taxids with OR."""
+        fq = " OR ".join([f"taxid:{tid}" for tid in taxids])
+        return self.query_taxo(fq=fq, fl=fl, rows=len(taxids))
+    
+    def query_addi_multiple(self, taxids, fl):
+        """Query multiple taxids with OR (addi database)."""
+        fq = " OR ".join([f"taxid:{tid}" for tid in taxids])
+        return self.query_addi(fq=fq, fl=fl, rows=len(taxids))

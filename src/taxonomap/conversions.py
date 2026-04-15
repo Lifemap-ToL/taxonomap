@@ -1,5 +1,5 @@
 from taxonomap.solr_request import SolrClient
-from taxonomap.utils.validation import convert_taxid
+from taxonomap.utils.validation import convert_taxid, validate_taxid_list
 
 client = SolrClient()
 
@@ -38,26 +38,24 @@ def taxid_to_latin_name(taxid: int | str | list) -> list:
 
     """
 
-    if isinstance(taxid, list):
-        results = []
-        for t in taxid:
-            latin_name = taxid_to_latin_name(t)
-            results.append(latin_name)
-        return results
+    if not isinstance(taxid, list):
+        taxids = [taxid]  # Transformer en liste
+    else:
+        taxids = taxid
 
-    taxid = convert_taxid(taxid)
+    # validation
+    validated = validate_taxid_list(taxids)
 
-    if taxid is None:
-        return taxid
-    if taxid == 0:
-        return "LUCA"
+    response = client.query_taxo_multiple(validated, fl="taxid,sci_name")
+    docs = response["response"]["docs"]
 
-    docs = client.query_taxo(fq=f"taxid:{taxid}", fl="sci_name")["response"]["docs"]
+    results = {doc["taxid"][0]: doc["sci_name"][0] for doc in docs}
 
-    if not docs:
-        raise ValueError(f"No result found for taxid: {taxid}")
+    # for special case LUCA
+    if 0 in validated:
+        results[0] = "LUCA"
 
-    return docs[0]["sci_name"][0]
+    return [results[tid] for tid in validated]
 
 
 def latin_name_to_taxid(sci_name: str) -> int:
