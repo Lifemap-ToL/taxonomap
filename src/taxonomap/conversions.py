@@ -39,7 +39,7 @@ def taxid_to_latin_name(taxid: int | str | list) -> list:
     """
 
     if not isinstance(taxid, list):
-        taxids = [taxid]  # Transformer en liste
+        taxids = [taxid]  # transform into a list
     else:
         taxids = taxid
 
@@ -58,20 +58,25 @@ def taxid_to_latin_name(taxid: int | str | list) -> list:
     return [results[tid] for tid in validated]
 
 
-def latin_name_to_taxid(sci_name: str) -> int:
+def latin_name_to_taxid(sci_name: str | list ) -> list:
     """
-    Convert scientific name to NCBI taxid (the exact match).
+    Currently in modification!
+
+    Convert scientific name to NCBI taxid (the exact match). 
 
     Parameters
     ----------
-    sci_name : str
+    sci_name : str or list
         Scientific name to search for (for example : 'Homo sapiens').
         It has to be an exact match.
+        The function transforms any type of input into a list.
+
+
 
     Returns
     -------
-    int
-        NCBI taxonomy identifier.
+    list
+        List of NCBI taxonomy identifiers.
 
     Raises
     ------
@@ -89,17 +94,14 @@ def latin_name_to_taxid(sci_name: str) -> int:
 
     """
 
-    docs = client.query_taxo(fq=f"sci_name:{sci_name}", fl="taxid,sci_name", rows=100)[
-        "response"
-    ]["docs"]
+    # if not isinstance(sci_name, list):
+    #     sci_name = [sci_name] # transform into a list
+    # else:
+    #     sci_name = sci_name
 
-    # loop on query results to get the exact sci_name's taxid
-    exact_matches = [doc for doc in docs if doc["sci_name"][0] == sci_name]
+    # response = client.query_taxo_names_multiple(sci_name, fl='taxid,sci_name')
+    # docs = response["response"]["docs"]
 
-    if len(exact_matches) == 0:
-        raise ValueError(f"Error : no exact match found for '{sci_name}'")
-
-    return exact_matches[0]["taxid"][0]
 
 
 def resolve_value(value):

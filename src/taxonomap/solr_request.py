@@ -55,3 +55,8 @@ class SolrClient:
         """Query multiple taxids with OR (addi database)."""
         fq = " OR ".join([f"taxid:{tid}" for tid in taxids])
         return self.query_addi(fq=fq, fl=fl, rows=len(taxids))
+    
+    def query_taxo_names_multiple(self, sci_names, fl):
+        """Query multiple scientific names with OR"""
+        fq = " OR ".join([f'sci_name:"{name}"' for name in sci_names])
+        return self.query_taxo(fq=fq, fl=fl, rows=len(sci_names) * 10)
