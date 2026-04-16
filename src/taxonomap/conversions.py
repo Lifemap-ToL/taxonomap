@@ -71,8 +71,6 @@ def latin_name_to_taxid(sci_name: str | list ) -> list:
         It has to be an exact match.
         The function transforms any type of input into a list.
 
-
-
     Returns
     -------
     list
@@ -82,7 +80,6 @@ def latin_name_to_taxid(sci_name: str | list ) -> list:
     ------
     ValueError
         If there is no exact match found for the provided input name.
-
 
     Examples
     --------
@@ -94,14 +91,27 @@ def latin_name_to_taxid(sci_name: str | list ) -> list:
 
     """
 
-    # if not isinstance(sci_name, list):
-    #     sci_name = [sci_name] # transform into a list
-    # else:
-    #     sci_name = sci_name
+    if not isinstance(sci_name, list):
+        sci_names = [sci_name] # transform into a list
+    else:
+        sci_names = sci_name
 
-    # response = client.query_taxo_names_multiple(sci_name, fl='taxid,sci_name')
-    # docs = response["response"]["docs"]
+    response = client.query_taxo_names_multiple(sci_names, fl='taxid,sci_name')
+    docs = response["response"]["docs"]
 
+    results = {}
+    for doc in docs:
+        doc_name = doc["sci_name"][0]
+        doc_taxid = doc["taxid"][0]
+        
+        # only keep the exact match, if not found yet
+        if doc_name in sci_names and doc_name not in results:
+            results[doc_name] = doc_taxid
+    
+    result_list = []
+    for name in sci_names:
+        result_list.append(results[name])
+    return result_list
 
 
 def resolve_value(value):
@@ -125,3 +135,4 @@ if __name__ == "__main__":
 # print(f"MRCA of 965 and 989: {mrca}")
     print("test élément int seul:", taxid_to_latin_name(9606))
     print("test pour une liste:", taxid_to_latin_name([9606, 965, 0]))
+    print("test latin_name_to_taxid en liste:", latin_name_to_taxid(["Homo sapiens", "Oceanospirillum", "Felis catus"]))
