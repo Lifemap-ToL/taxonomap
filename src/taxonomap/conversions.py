@@ -27,10 +27,10 @@ def taxid_to_latin_name(taxid: int | str | list) -> list:
     Examples
     --------
     >>> taxid_to_latin_name(9606)
-    'Homo sapiens'
+    ['Homo sapiens']
 
-    >>> taxid_to_latin_name("965")
-    'Oceanospirillum'
+    >>> taxid_to_latin_name([9606, 965, 0])
+    ['Homo sapiens', 'Oceanospirillum', 'LUCA']
 
     Notes
     -----
@@ -84,10 +84,10 @@ def latin_name_to_taxid(sci_name: str | list ) -> list:
     Examples
     --------
     >>> latin_name_to_taxid("Homo sapiens")
-    9606
+    [9606]
 
-    >>> latin_name_to_taxid("Oceanospirillum")
-    965
+    >>> latin_name_to_taxid(["Homo sapiens", "Oceanospirillum", "Felis catus"])
+    [9606, 965, 9685]
 
     """
 
@@ -115,6 +115,33 @@ def latin_name_to_taxid(sci_name: str | list ) -> list:
 
 
 def resolve_value(value):
+    """
+    Resolve a taxid or scientific name to a validated taxid.
+    
+    This function accepts either a taxid (as integer or string) or a
+    scientific name (as string) and returns the corresponding validated taxid.
+    
+    Parameters
+    --------
+    value : int or str
+        NCBI taxonomy identifier (int or numeric string), or scientific name (string).
+    
+    Returns
+    -----
+    int
+        Validated NCBI taxonomy identifier
+    
+    Raises
+    ------
+    ValueError
+        If value is an empty string.
+    ValueError
+        If the taxid is invalidd or not found in the database
+    ValueError
+        If the scientific name does not have an exact match in the database
+
+    """
+
     if type(value) is str:
         if value == "":
             raise ValueError("Latin name cannot be empty")
@@ -125,7 +152,6 @@ def resolve_value(value):
             value = value[0]
     return convert_taxid(value)
 
-
 # tests
 if __name__ == "__main__":
 # print(taxid_to_latin_name(965))
@@ -135,4 +161,5 @@ if __name__ == "__main__":
 # print(f"MRCA of 965 and 989: {mrca}")
     print("test élément int seul:", taxid_to_latin_name(9606))
     print("test pour une liste:", taxid_to_latin_name([9606, 965, 0]))
+    print("test latin_name_to_taxid str seul :", latin_name_to_taxid("Homo sapiens"))
     print("test latin_name_to_taxid en liste:", latin_name_to_taxid(["Homo sapiens", "Oceanospirillum", "Felis catus"]))
