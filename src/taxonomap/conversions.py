@@ -112,6 +112,7 @@ def resolve_value(value):
             value = convert_taxid(value)
         except ValueError:
             value = latin_name_to_taxid(value)
+            value = value[0]
     return convert_taxid(value)
 
 
