@@ -1,6 +1,6 @@
 from taxonomap.solr_request import SolrClient
 from taxonomap.utils.validation import convert_taxid, validate_taxid_list
-
+import requests
 client = SolrClient()
 
 
@@ -150,14 +150,54 @@ def resolve_value(value):
             value = value[0]
     return convert_taxid(value)
 
+
+def get_version() -> dict:
+    """
+    Fetch metadata from the LifeMap server.
+
+    Returns
+    -------
+    dict
+        A dictionary containing metadata, including the last update date
+        and species counts by domain (archaea, bacteria, eukaryotes, total).
+
+    Raises
+    ------
+    RuntimeError
+        If the request fails or the response is not valid JSON.
+
+    Examples
+    --------
+    >>> get_metadata()
+    {'update': '2026-04-13', 'species': {'archaea': 13587, 'eukaryotes': 1616271, 'bacteria': 577924, 'total': 2207782}}
+
+    """
+
+    url = "https://lifemap-back.univ-lyon1.fr/static/metadata.json"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()['update']
+    except requests.exceptions.RequestException as e:
+        raise RuntimeError(f"Failed to fetch metadata: {e}")
+
+
+
+
+
+
+
+
+
 # tests
 if __name__ == "__main__":
+    print(get_version())
 # print(taxid_to_latin_name(965))
 # print(latin_name_to_taxid("Oceanospirillum"))
 
 # mrca = get_MRCA_taxid(965,989)
 # print(f"MRCA of 965 and 989: {mrca}")
-    print("test élément int seul:", taxid_to_latin_name(9606))
-    print("test pour une liste:", taxid_to_latin_name([9606, 965, 0]))
-    print("test latin_name_to_taxid str seul :", latin_name_to_taxid("Homo sapiens"))
-    print("test latin_name_to_taxid en liste:", latin_name_to_taxid(["Homo sapiens", "Oceanospirillum", "Felis catus"]))
+    # print("test élément int seul:", taxid_to_latin_name(9606))
+    # print("test pour une liste:", taxid_to_latin_name([9606, 965, 0]))
+    # print("test latin_name_to_taxid str seul :", latin_name_to_taxid("Homo sapiens"))
+    # print("test latin_name_to_taxid en liste:", latin_name_to_taxid(["Homo sapiens", "Oceanospirillum", "Felis catus"]))
