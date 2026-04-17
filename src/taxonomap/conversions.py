@@ -60,8 +60,6 @@ def taxid_to_latin_name(taxid: int | str | list) -> list:
 
 def latin_name_to_taxid(sci_name: str | list ) -> list:
     """
-    Currently in modification!
-
     Convert scientific name to NCBI taxid (the exact match). 
 
     Parameters
