@@ -1,7 +1,7 @@
 from taxonomap.solr_request import SolrClient
 from taxonomap.utils.validation import convert_taxid, validate_taxid_list
 import requests
-client = SolrClient()
+
 
 
 def taxid_to_latin_name(taxid: int | str | list) -> list:
@@ -37,7 +37,7 @@ def taxid_to_latin_name(taxid: int | str | list) -> list:
     Taxid 0 returns 'LUCA' (Last Universal Common Ancestor).
 
     """
-
+    client = SolrClient()
     if not isinstance(taxid, list):
         taxids = [taxid]  # transform into a list
     else:
@@ -88,7 +88,7 @@ def latin_name_to_taxid(sci_name: str | list ) -> list:
     [9606, 965, 9685]
 
     """
-
+    client = SolrClient()
     if not isinstance(sci_name, list):
         sci_names = [sci_name] # transform into a list
     else:
@@ -139,7 +139,7 @@ def resolve_value(value):
         If the scientific name does not have an exact match in the database
 
     """
-
+    
     if type(value) is str:
         if value == "":
             raise ValueError("Latin name cannot be empty")

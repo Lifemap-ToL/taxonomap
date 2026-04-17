@@ -2,7 +2,6 @@ from taxonomap.conversions import taxid_to_latin_name, resolve_value
 from taxonomap.solr_request import SolrClient
 
 
-client = SolrClient()
 
 
 def get_ascendant(value: int | str) -> list:
@@ -38,6 +37,7 @@ def get_ascendant(value: int | str) -> list:
     []
 
     """
+    client = SolrClient()
 
     value = resolve_value(value)
 
@@ -79,6 +79,7 @@ def get_descendants(value: int | str) -> list:
     >>> get_all_descendants("Felis")
     [9683, 9685, 9688, ...]
     """
+    client = SolrClient()
 
     value = resolve_value(value)
 
@@ -116,6 +117,8 @@ def get_tips(value: int | str) -> list:
     >>> get_tips("Felis")
     [9683, 9685, 9688, ...]
     """
+    client = SolrClient()
+
     value = resolve_value(value)
 
     if value is None:
@@ -157,6 +160,8 @@ def get_children(value: int | str) -> list:
     >>> get_children("Felis")
     [9683, 9685]
     """
+    client = SolrClient()
+
     value = resolve_value(value)
 
     if value is None:
@@ -191,6 +196,7 @@ def get_siblings(value: int | str) -> list:
     >>> get_siblings("Felis catus")
     [9683, 9688, ...]
     """
+    client = SolrClient()
 
     value = resolve_value(value)
 
@@ -250,6 +256,7 @@ def get_MRCA(*taxids):
     to oldest ancestor.
 
     """
+    client = SolrClient()
 
     if len(taxids) < 2:
         raise ValueError("Need at least 2 taxids to find MRCA")
