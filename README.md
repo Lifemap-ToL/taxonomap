@@ -7,8 +7,7 @@ It allows you to convert between taxids and scientific names, and to explore the
 
 ## Installation
 
-```bash
-Avoir faut en discuter 
+Avoir faut en discuter
 
 ---
 
