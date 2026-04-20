@@ -1,25 +1,73 @@
-# FONCTIONS EXISTANTES
-conversions.py :
-- [x] taxid_to_latin_name (suggestion de nom simplifié : taxid2name)
-- [x] latin_name_to_taxid (suggestion : name2taxid)
+# taxonomap
 
-phylogeny.py :
-- [x] get_ascendants : Get the lineage (list of ancestors) for a given taxid or name. 
-- [x] get_descendants : Get all descendant taxids for a given taxid or name.
-		
+Python package to interact with the [LifeMap](https://lifemap.univ-lyon1.fr/) taxonomy database.  
+It allows you to convert between taxids and scientific names, and to explore the tree of life (ancestors, descendants, children, siblings, MRCA...).
 
-# FONCTIONS À CRÉER MODIFIER
-- [X] get_descendants : Ajout options/autres fonctions pour retourner uniquement les feuilles, les siblings, direct children
-- [] Mutualiser des parties de get_descendants + get_ascendants (répétitions)
-- [X] Créer une classe SolrRequest : méthode(s) d'exécution de requête, méthode(s) d'extraction des résultats
-- [ ] get_MRCA : 
-	- [ ] Améliorer pour prendre une liste en input
-	- [ ] Une seule requête Solr (et non une par taxid) 
-	- [ ] Vérification #taxid = #documents
+---
 
-- [ ] Afficher la version de la taxonomie utilisée (?)
-- [ ] validation.py : Créer une fonction qui vérifie les listes en entrées, et pour chaque taxid de la liste vérifie : 
-	- que c'est soit une str soit un int
-	- si c'est une str, la convertit en int
-	- vérifie qu'il s'agit d'un entier positif
+## Installation
 
+```bash
+Avoir faut en discuter 
+
+---
+
+## Functions
+
+### `Conversions`
+
+| Function | Description |
+|---|---|
+| `taxid_to_latin_name(taxid)` | Convert one or a list of NCBI taxids to scientific names |
+| `latin_name_to_taxid(sci_name)` | Convert one or a list of scientific names to NCBI taxids (exact match) |
+| `get_version()` | Fetch the last update date of the LifeMap database |
+
+### `Phylogeny`
+
+All phylogeny functions accept either a taxid (`int` or `str`) or a scientific name (`str`).
+
+| Function | Description |
+|---|---|
+| `get_ascendant(value)` | Get the full lineage (list of ancestor taxids) of a taxon |
+| `get_descendants(value)` | Get all descendant taxids of a taxon |
+| `get_tips(value)` | Get all terminal (leaf) taxids of a taxon |
+| `get_children(value)` | Get the direct children taxids of a taxon |
+| `get_siblings(value)` | Get the sibling taxids of a taxon |
+| `get_MRCA(*taxids)` | Find the Most Recent Common Ancestor of two or more taxids |
+
+
+---
+
+## Usage examples
+
+### Example 1 — Convert names and explore lineage
+
+```python
+from taxonomap.conversions import taxid_to_latin_name, latin_name_to_taxid
+from taxonomap.phylogeny import get_ascendant, get_children
+
+# Convert taxid to scientific name
+print(taxid_to_latin_name(9606))          # ['Homo sapiens']
+print(taxid_to_latin_name([9606, 9685]))  # ['Homo sapiens', 'Felis catus']
+
+# Convert scientific name to taxid
+print(latin_name_to_taxid("Homo sapiens"))  # [9606]
+
+# Get the full lineage of a taxon
+lineage = get_ascendant(9606)
+print(lineage)  # [9605, 207598, 9604, ...]
+
+# Get the direct children of a taxon (works with name too)
+children = get_children("Felis")
+print(children)  # [9683, 9685, ...]
+```
+
+### Example 2 — Find the common ancestor of two species
+
+```python
+from taxonomap.phylogeny import get_MRCA
+
+mrca = get_MRCA(9606, 9685)  # Human and cat
+print(mrca['taxid'])  # taxid of the MRCA
+print(mrca['name'])   # ['Boreoeutheria']
+```
