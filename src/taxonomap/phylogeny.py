@@ -2,8 +2,6 @@ from taxonomap.conversions import taxid_to_latin_name, resolve_value
 from taxonomap.solr_request import SolrClient
 
 
-
-
 def get_ascendant(value: int | str) -> list:
     """
     Get the lineage (list of ancestors) for a given taxid or name.
@@ -284,13 +282,3 @@ def get_MRCA(*taxids):
 
     raise ValueError("could not determine MRCA!")  # supposedly it should never happen
 
-
-# tests
-# if __name__ == "__main__":
-# print(get_ascendant("965"))
-# print(f"MRCA of 965, 989 : {get_MRCA(965, 989)}")
-# print(f"MRCA of 9606, 9685, 10090: {get_MRCA(9606, 9685, 10090)}")
-# print(get_descendants(965))
-# print(get_tips(2953757))
-# print(get_children(130975))
-# print(get_siblings(184512))
