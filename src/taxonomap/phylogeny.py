@@ -210,7 +210,7 @@ def get_siblings(value: int | str) -> list:
     return siblings
 
 
-def get_MRCA(*taxids):
+def get_MRCA(taxids):
     """
     Find the Most Recent Common Ancestor (MRCA) of multiple taxids.
 
@@ -256,29 +256,28 @@ def get_MRCA(*taxids):
     """
     client = SolrClient()
 
-    if len(taxids) < 2:
+    if not isinstance(taxids, list):
+        taxids_list = [taxids]
+    else:
+        taxids_list = taxids
+
+    if len(taxids_list) < 2:
         raise ValueError("Need at least 2 taxids to find MRCA")
 
-    all_lineages = []
+    response = client.query_addi_multiple(taxids_list, fl="taxid,ascend")
+    docs = response["response"]["docs"]    
 
-    for taxid in taxids:
-        docs = client.query_addi(fq=f"taxid:{taxid}", fl="ascend")["response"]["docs"]
-        if not docs:
-            raise ValueError(f"Taxid {taxid} not found")
-
-        lineage = docs[0]["ascend"]
-        all_lineages.append(lineage)
+    lineage_dict = {doc["taxid"][0]: doc["ascend"] for doc in docs}
+    all_lineages = [lineage_dict[tid] for tid in taxids_list]
 
     lineages_sets = [set(lineage) for lineage in all_lineages]
     common_ancestors = set.intersection(*lineages_sets)
-    # print(common_ancestors)
 
     if not common_ancestors:
         raise ValueError("No common ancestor found!")
 
     for taxid in all_lineages[0]:
         if taxid in common_ancestors:
-            return {"taxid": taxid, "name": taxid_to_latin_name(taxid)}
+            return {"taxid": taxid, "name": taxid_to_latin_name(taxid)[0]}
 
     raise ValueError("could not determine MRCA!")  # supposedly it should never happen
-
