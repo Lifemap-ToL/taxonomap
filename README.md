@@ -66,9 +66,10 @@ print(children)  # [9683, 9685, ...]
 ```python
 from taxonomap.phylogeny import get_MRCA
 
-mrca = get_MRCA(9606, 9685)  # Human and cat
-print(mrca['taxid'])  # taxid of the MRCA
-print(mrca['name'])   # ['Boreoeutheria']
+mrca = get_MRCA([9606, 9685])  # Human and cat
+print(mrca) # {'taxid': 1437010, 'name': 'Boreoeutheria'}
+print(mrca['taxid'])  # 1437010
+print(mrca['name'])   # Boreoeutheria
 ```
 
 
