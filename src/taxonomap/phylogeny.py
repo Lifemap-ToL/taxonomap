@@ -1,4 +1,5 @@
 from taxonomap.conversions import taxid_to_latin_name, resolve_value
+from taxonomap.utils.validation import validate_taxid_list
 from taxonomap.solr_request import SolrClient
 
 
@@ -210,14 +211,14 @@ def get_siblings(value: int | str) -> list:
     return siblings
 
 
-def get_MRCA(taxids):
+def get_MRCA(taxids:list) -> dict:
     """
     Find the Most Recent Common Ancestor (MRCA) of multiple taxids.
 
     Parameters
     --------
-    *taxids : int
-        Two or more NCBI taxonomy identifiers.
+    taxids : list of int | list of str
+        List containing two or more NCBI taxonomy identifiers.
 
     Returns
     -------
@@ -242,9 +243,14 @@ def get_MRCA(taxids):
     --------
     Find MRCA of human and cat:
 
-    >>> mrca = get_MRCA(9606, 9685)
-    >>> print(mrca['name'])
-    'Boreoeutheria'
+    >>> get_MRCA([9606, 9685])
+    {'taxid': 1437010, 'name': 'Boreoeutheria'}
+
+    or 
+
+    >>> get_MRCA(['9606', '9685'])
+    {'taxid': 1437010, 'name': 'Boreoeutheria'}
+
 
     Notes
     -----
@@ -264,11 +270,13 @@ def get_MRCA(taxids):
     if len(taxids_list) < 2:
         raise ValueError("Need at least 2 taxids to find MRCA")
 
-    response = client.query_addi_multiple(taxids_list, fl="taxid,ascend")
+    validated = validate_taxid_list(taxids_list)
+
+    response = client.query_addi_multiple(validated, fl="taxid,ascend")
     docs = response["response"]["docs"]    
 
     lineage_dict = {doc["taxid"][0]: doc["ascend"] for doc in docs}
-    all_lineages = [lineage_dict[tid] for tid in taxids_list]
+    all_lineages = [lineage_dict[tid] for tid in validated]
 
     lineages_sets = [set(lineage) for lineage in all_lineages]
     common_ancestors = set.intersection(*lineages_sets)
