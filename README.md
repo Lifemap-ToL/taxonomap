@@ -70,3 +70,45 @@ mrca = get_MRCA(9606, 9685)  # Human and cat
 print(mrca['taxid'])  # taxid of the MRCA
 print(mrca['name'])   # ['Boreoeutheria']
 ```
+
+
+---
+
+## Developer documentation
+
+### Building the documentation
+
+The taxonomap project uses [Sphinx](https://www.sphinx-doc.org/) to generate an HTML documentation from the docstrings written inside the code.
+
+Before starting:
+```bash
+# the documentation dependencies are already written in pyproject.toml
+uv sync
+```
+
+How to build the documentationn:
+```bash
+cd docs
+uv run make html
+```
+
+View the documentation:
+
+The generated HTML files are located in `docs/_build/html/`.
+
+Now open `docs/_build/html/index.html` in your browser to view the documentation :
+```bash
+# on Linux or macOS
+open docs/_build/html/index.html
+
+# on Windows
+start docs/_build/html/index.html
+```
+
+Clean the build files:
+```bash
+cd docs
+uv run make clean
+```
+
+NB: the `_build/` directory is git-ignored, and it should not be committed.
