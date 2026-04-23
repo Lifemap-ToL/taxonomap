@@ -19,14 +19,6 @@ cd taxonomap
 uv pip install .
 ```
 
-### For development
-
-```bash
-git clone https://github.com/Lifemap-ToL/taxonomap.git
-cd taxonomap
-uv pip install -e .
-```
-
 ---
 
 ## Functions
@@ -94,6 +86,14 @@ print(mrca['name'])   # Boreoeutheria
 ---
 
 ## Developer documentation
+
+### Installation for development
+
+```bash
+git clone https://github.com/Lifemap-ToL/taxonomap.git
+cd taxonomap
+uv pip install -e .
+```
 
 ### Building the documentation
 
