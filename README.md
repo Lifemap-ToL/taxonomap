@@ -60,7 +60,7 @@ All phylogeny functions accept either a taxid (`int` or `str`) or a scientific n
 
 ```python
 from taxonomap.conversions import taxid_to_latin_name, latin_name_to_taxid
-from taxonomap.phylogeny import get_ascendant, get_children
+from taxonomap.phylogeny import get_ascendants, get_children
 
 # Convert taxid to scientific name
 print(taxid_to_latin_name(9606))          # ['Homo sapiens']
@@ -70,7 +70,7 @@ print(taxid_to_latin_name([9606, 9685]))  # ['Homo sapiens', 'Felis catus']
 print(latin_name_to_taxid("Homo sapiens"))  # [9606]
 
 # Get the full lineage of a taxon
-lineage = get_ascendant(9606)
+lineage = get_ascendants(9606)
 print(lineage)  # [9605, 207598, 9604, ...]
 
 # Get the direct children of a taxon (works with name too)
@@ -109,7 +109,7 @@ print(newick)
 ```bash
 git clone https://github.com/Lifemap-ToL/taxonomap.git
 cd taxonomap
-uv pip install -e .
+uv sync install -e .
 ```
 
 ### Building the documentation
