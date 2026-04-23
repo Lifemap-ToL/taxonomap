@@ -22,7 +22,14 @@ release = "0.1.0"
 extensions = [
     "sphinx.ext.autodoc",  # doc auto depuis le code
     "sphinx.ext.napoleon",  # pour lire doc style numpy
+    "myst_parser" #pour ecrire la doc en markdown (md) plutôt qu'en syntaxe reStructuredText (rst)
 ]
+
+# support pour .md et .rst
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
 
 napoleon_numpy_docstring = True
 napoleon_google_docstring = False
