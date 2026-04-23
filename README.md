@@ -88,7 +88,17 @@ print(mrca) # {'taxid': 1437010, 'name': 'Boreoeutheria'}
 print(mrca['taxid'])  # 1437010
 print(mrca['name'])   # Boreoeutheria
 ```
+### Example 3 — Build a subtree from a list of taxids
 
+```python
+from taxonomap.phylogeny import get_subtree
+
+# Build the minimal taxonomic subtree connecting several taxids,
+# rooted at their Most Recent Common Ancestor.
+newick = get_subtree([2048884, 708628])
+print(newick)
+# ((((((708628)362234)2799)2798)2797)2763,(((((((((((((((2048884)297754)43272)101146)43277)43271)6854)6843)6656)88770)1206794)33317)33213)6072)33208)33154)2759;
+```
 
 ---
 
