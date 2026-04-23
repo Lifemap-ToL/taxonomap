@@ -94,6 +94,12 @@ def latin_name_to_taxid(sci_name: str | list ) -> list:
     else:
         sci_names = sci_name
 
+    for name in sci_names:
+        if not isinstance(name, str):
+            raise ValueError(f"Scientific name must be a string, got {type(name).__name__}: {name}")
+        if name == "":
+            raise ValueError("Scientific name cannot be empty")
+
     response = client.query_taxo_names_multiple(sci_names, fl='taxid,sci_name')
     docs = response["response"]["docs"]
 
