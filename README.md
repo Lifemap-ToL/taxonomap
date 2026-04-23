@@ -7,7 +7,25 @@ It allows you to convert between taxids and scientific names, and to explore the
 
 ## Installation
 
-Avoir faut en discuter
+A discuter (rendre dispo sur PyPiI??). En attendant:
+
+### Install from GitHub
+
+---
+
+```bash
+git clone https://github.com/Lifemap-ToL/taxonomap.git
+cd taxonomap
+uv pip install .
+```
+
+### For development
+
+```bash
+git clone https://github.com/Lifemap-ToL/taxonomap.git
+cd taxonomap
+uv pip install -e .
+```
 
 ---
 
