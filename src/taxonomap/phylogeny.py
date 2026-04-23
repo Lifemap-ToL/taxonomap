@@ -3,7 +3,7 @@ from taxonomap.utils.validation import validate_taxid_list
 from taxonomap.solr_request import SolrClient
 
 
-def get_ascendant(value: int | str) -> list:
+def get_ascendants(value: int | str) -> list:
     """
     Get the lineage (list of ancestors) for a given taxid or name.
 
@@ -328,7 +328,7 @@ def get_subtree(taxids: list) -> str:
 
     child_to_parent = {}
     for taxid in validated:
-        lineage = get_ascendant(taxid)
+        lineage = get_ascendants(taxid)
         full_chain = [taxid] + lineage
         for i in range(len(full_chain) - 1):
             child_to_parent.setdefault(full_chain[i], full_chain[i + 1])

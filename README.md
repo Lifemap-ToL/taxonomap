@@ -4,6 +4,7 @@ Python package to interact with the [LifeMap](https://lifemap.univ-lyon1.fr/) ta
 It allows you to convert between taxids and scientific names, and to explore the tree of life (ancestors, descendants, children, siblings, MRCA...).
 
 Taxonomap queries the LifeMap Solr backend directly, which mirrors the NCBI taxonomy database. No local database setup is needed and data stays always up-to-date, with a lightweight install.
+
 ---
 
 ## Installation
