@@ -3,11 +3,17 @@
 Python package to interact with the [LifeMap](https://lifemap.univ-lyon1.fr/) taxonomy database.  
 It allows you to convert between taxids and scientific names, and to explore the tree of life (ancestors, descendants, children, siblings, MRCA...).
 
+Taxonomap queries the LifeMap Solr backend directly, which mirrors the NCBI taxonomy database. No local database setup is needed and data stays always up-to-date, with a lightweight install.
 ---
 
 ## Installation
 
-A discuter (rendre dispo sur PyPiI??). En attendant:
+# Install with pip
+pip install git+https://github.com/Lifemap-ToL/taxonomap.git
+# Add to a project with uv
+uv add git+https://github.com/Lifemap-ToL/taxonomap.git
+# Run a python sessioon using taxonomap with uv
+uv run --with git+https://github.com/Lifemap-ToL/taxonomap.git python
 
 ### Install from GitHub
 
@@ -42,7 +48,7 @@ All phylogeny functions accept either a taxid (`int` or `str`) or a scientific n
 | `get_tips(value)` | Get all terminal (leaf) taxids of a taxon |
 | `get_children(value)` | Get the direct children taxids of a taxon |
 | `get_siblings(value)` | Get the sibling taxids of a taxon |
-| `get_MRCA(*taxids)` | Find the Most Recent Common Ancestor of two or more taxids |
+| `get_MRCA(taxids)` | Find the Most Recent Common Ancestor of a list of two or more taxids |
 | `get_subtree(taxids)` | Build the minimal taxonomic subtree connecting a list of taxids in Newick format |
 
 
