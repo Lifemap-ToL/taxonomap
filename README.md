@@ -154,3 +154,16 @@ uv run make clean
 ```
 
 NB: the `_build/` directory is git-ignored, and it should not be committed.
+
+
+## Future Development
+
+The following features are planned for future releases:
+
+- **Custom hierarchical table** : a function that takes a list of taxids as input and returns a clean table with user-defined hierarchical levels, rather than including all possible taxonomic ranks. For example:
+  `taxid | class | order | super-family | family | genus | species`
+
+- **Improved handling of large queries**: better performance and memory management for requests returning large volumes of data.
+
+- **Extended Solr data access**: additional functions to retrieve other data fields available in the Solr database, beyond the currently supported ones.
+
