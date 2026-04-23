@@ -17,22 +17,6 @@ Phylogeny Functions
    :undoc-members:
    :show-inheritance:
 
-Validation Utilities
---------------------
-
-.. automodule:: taxonomap.utils.validation
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Solr Request Module
--------------------
-
-.. automodule:: taxonomap.solr_request
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Configuration
 -------------
 
