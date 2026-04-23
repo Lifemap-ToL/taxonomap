@@ -7,5 +7,6 @@ taxonomap is a Python package for NCBI taxonomy manipulation, synchronised with 
    :maxdepth: 2
    :caption: Contents:
    
+   getting_started
    api
 

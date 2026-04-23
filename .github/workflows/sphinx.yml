@@ -21,7 +21,9 @@ jobs:
 
             - name: Render
               shell: bash
-              run: uv run make html
+              run: |
+                   cd docs/ 
+                   uv run make html
 
             - name: Upload static files as artifact
               id: deployment
