@@ -43,6 +43,7 @@ All phylogeny functions accept either a taxid (`int` or `str`) or a scientific n
 | `get_children(value)` | Get the direct children taxids of a taxon |
 | `get_siblings(value)` | Get the sibling taxids of a taxon |
 | `get_MRCA(*taxids)` | Find the Most Recent Common Ancestor of two or more taxids |
+| `get_subtree(taxids)` | Build the minimal taxonomic subtree connecting a list of taxids in Newick format |
 
 
 ---
