@@ -1,7 +1,7 @@
 from taxonomap.conversions import taxid_to_latin_name, resolve_value
 from taxonomap.utils.validation import validate_taxid_list
 from taxonomap.solr_request import SolrClient
-
+from taxonomap.config import MAX_ROWS
 
 def get_ascendants(value: int | str) -> list:
     """
@@ -86,7 +86,7 @@ def get_descendants(value: int | str) -> list:
         return value
 
     docs = client.result_get_descendant(
-        client.query_addi(fq=f"ascend:{value}", fl="taxid", rows=1000000)
+        client.query_addi(fq=f"ascend:{value}", fl="taxid", rows = MAX_ROWS)
     )
 
     return docs
@@ -124,7 +124,7 @@ def get_tips(value: int | str) -> list:
         return value
 
     descendants = client.result_get_descendant(
-        client.query_addi(fq=f"ascend:{value}", fl="taxid", rows=1000000)
+        client.query_addi(fq=f"ascend:{value}", fl="taxid", rows = MAX_ROWS)
     )
 
     tips = []
@@ -166,7 +166,7 @@ def get_children(value: int | str) -> list:
     if value is None:
         return value
 
-    result = client.query_addi(fq=f"ascend:{value}", fl="taxid,ascend", rows=1000000)
+    result = client.query_addi(fq=f"ascend:{value}", fl="taxid,ascend", rows = MAX_ROWS)
     return client.result_get_children(result, value)
 
 
