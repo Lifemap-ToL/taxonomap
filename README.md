@@ -37,7 +37,7 @@ All phylogeny functions accept either a taxid (`int` or `str`) or a scientific n
 
 | Function | Description |
 |---|---|
-| `get_ascendant(value)` | Get the full lineage (list of ancestor taxids) of a taxon |
+| `get_ascendants(value)` | Get the full lineage (list of ancestor taxids) of a taxon |
 | `get_descendants(value)` | Get all descendant taxids of a taxon |
 | `get_tips(value)` | Get all terminal (leaf) taxids of a taxon |
 | `get_children(value)` | Get the direct children taxids of a taxon |
