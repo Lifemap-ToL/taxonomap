@@ -168,7 +168,7 @@ def get_version() -> str:
 
     Examples
     --------
-    >>> get_metadata()
+    >>> get_version()
     2026-04-13
 
     """
@@ -179,4 +179,4 @@ def get_version() -> str:
         response.raise_for_status()
         return response.json()['update']
     except requests.exceptions.RequestException as e:
-        raise RuntimeError(f"Failed to fetch metadata: {e}")
+        raise RuntimeError(f"Failed to fetch version: {e}")

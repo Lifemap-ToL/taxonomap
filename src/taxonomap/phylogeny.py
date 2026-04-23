@@ -26,13 +26,13 @@ def get_ascendants(value: int | str) -> list:
 
     Examples
     -------
-    >>> get_all_ascendant(965)
+    >>> get_ascendants(965)
     [135620, 135619, 1236, 1224, 3379134, 2, 0]
 
-    >>> get_all_ascendant("Oceanospirillum")
+    >>> get_ascendants("Oceanospirillum")
     [135620, 135619, 1236, 1224, 3379134, 2, 0]
 
-    >>> get_all_ascendant(0)
+    >>> get_ascendants(0)
     []
 
     """
@@ -72,10 +72,10 @@ def get_descendants(value: int | str) -> list:
 
     Examples
     -------
-    >>> get_all_descendants(9682)
+    >>> get_descendants(9682)
     [9683, 9685, 9688, ...]
 
-    >>> get_all_descendants("Felis")
+    >>> get_descendants("Felis")
     [9683, 9685, 9688, ...]
     """
     client = SolrClient()
