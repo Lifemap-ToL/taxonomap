@@ -289,3 +289,84 @@ def get_MRCA(taxids:list) -> dict:
             return {"taxid": taxid, "name": taxid_to_latin_name(taxid)[0]}
 
     raise ValueError("could not determine MRCA!")  # supposedly it should never happen
+
+
+
+
+
+
+def get_subtree(taxids: list) -> str:
+    """
+    Build the minimal taxonomic subtree connecting a list of taxids,
+    rooted at their Most Recent Common Ancestor, with all intermediate
+    nodes preserved. Children at each node are ordered by subtree depth
+    (shortest branch first).
+
+    Parameters
+    ----------
+    taxids : list of int | list of str
+        List of at least 2 NCBI taxids to place as leaves.
+
+    Returns
+    -------
+    str
+        Newick-formatted tree string, rooted at the MRCA of the input taxids.
+
+    Raises
+    ------
+    ValueError
+        If fewer than 2 taxids are provided.
+    """
+    if not isinstance(taxids, list):
+        taxids = [taxids]
+    if len(taxids) < 2:
+        raise ValueError("Need at least 2 taxids to build a subtree")
+
+    validated = validate_taxid_list(taxids)
+
+
+
+    child_to_parent = {}
+    for taxid in validated:
+        lineage = get_ascendant(taxid)
+        full_chain = [taxid] + lineage
+        for i in range(len(full_chain) - 1):
+            child_to_parent.setdefault(full_chain[i], full_chain[i + 1])
+
+
+
+    parent_to_children = {}
+    for child, parent in child_to_parent.items():
+        parent_to_children.setdefault(parent, []).append(child)
+
+
+
+    leaves = set(validated)
+    node = 0
+    while True:
+        children = parent_to_children.get(node, [])
+        if len(children) != 1 or node in leaves:
+            break
+        node = children[0]
+    mrca = node
+
+
+
+    def depth(node):
+        children = parent_to_children.get(node, [])
+        if not children:
+            return 0
+        return 1 + max(depth(c) for c in children)
+
+
+    def to_newick(node):
+        children = parent_to_children.get(node, [])
+        if not children:
+            return str(node)
+        children = sorted(children, key=depth)
+        parts = [to_newick(c) for c in children]
+        return "(" + ",".join(parts) + ")" + str(node)
+
+    return to_newick(mrca) + ";"
+
+
