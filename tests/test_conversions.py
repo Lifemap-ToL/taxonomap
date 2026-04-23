@@ -55,6 +55,10 @@ class TestTaxidToLatinName:
         result = taxid_to_latin_name([9606, 965, 0])
         assert result == ["Homo sapiens", "Oceanospirillum", "LUCA"]
 
+    def test_empty_string(self):
+        """Test with an empty string"""
+        with pytest.raises(ValueError):
+            taxid_to_latin_name("") 
 
 class TestLatinNameToTaxid:
     def test_valid_single_name(self):
@@ -93,6 +97,15 @@ class TestLatinNameToTaxid:
         with pytest.raises(KeyError):
             latin_name_to_taxid("Homo")
 
+    def test_empty_string(self):
+        """Test with an empty string"""
+        with pytest.raises(ValueError):
+            latin_name_to_taxid("")
+
+    def test_empty_string_in_list(self):
+        """Test with an empty string in a list"""
+        with pytest.raises(ValueError):
+            latin_name_to_taxid(["Homo sapiens", ""])
 
 class TestResolveValue:
     def test_valid_int_taxid(self):
