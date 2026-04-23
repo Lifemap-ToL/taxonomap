@@ -9,13 +9,18 @@ Taxonomap queries the LifeMap Solr backend directly, which mirrors the NCBI taxo
 
 ## Installation
 
-# Install with pip
+### `Install with pip`
+```
 pip install git+https://github.com/Lifemap-ToL/taxonomap.git
-# Add to a project with uv
+```
+### `Add to a project with uv`
+```
 uv add git+https://github.com/Lifemap-ToL/taxonomap.git
-# Run a python sessioon using taxonomap with uv
+```
+### `Run a python sessioon using taxonomap with uv`
+```
 uv run --with git+https://github.com/Lifemap-ToL/taxonomap.git python
-
+```
 ### Install from GitHub
 
 ---
