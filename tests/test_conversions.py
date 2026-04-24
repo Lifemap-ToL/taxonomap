@@ -42,8 +42,9 @@ class TestTaxidToLatinName:
 
     def test_invalid_taxid(self):
         """Test with a non-existing taxid"""
-        with pytest.raises(ValueError, match="Invalid taxid"):
-            taxid_to_latin_name(9999999999999)
+        with pytest.warns(UserWarning, match="Taxids not found in database"):
+            result = taxid_to_latin_name(9999999999999)
+            assert result == [None]
 
     def test_luca_zero(self):
         """Test with taxid 0 (LUCA)"""
@@ -89,13 +90,15 @@ class TestLatinNameToTaxid:
 
     def test_invalid_name(self):
         """Test with a non-existing scientific name"""
-        with pytest.raises(KeyError):
-            latin_name_to_taxid("None existing")
+        with pytest.warns(UserWarning, match="No exact match found"):
+            result = latin_name_to_taxid("None existing")
+            assert result == [None]
 
     def test_partial_name_no_match(self):
         """Test that a partial name does not match (exact match required)"""
-        with pytest.raises(KeyError):
-            latin_name_to_taxid("Homo")
+        with pytest.warns(UserWarning, match="No exact match found"):
+            result = latin_name_to_taxid("Homo")
+            assert result == [None]
 
     def test_empty_string(self):
         """Test with an empty string"""
