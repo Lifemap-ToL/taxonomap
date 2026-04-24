@@ -1,5 +1,5 @@
 from taxonomap.solr_request import SolrClient
-from taxonomap.utils.validation import convert_taxid, validate_taxid_list, normalize_taxid
+from taxonomap.utils.validation import convert_taxid, normalize_taxid
 import requests
 import warnings
 
