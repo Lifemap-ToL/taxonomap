@@ -49,7 +49,7 @@ def valid_taxid(taxid: int) -> int | None:
     return taxid
 
 
-def convert_taxid(taxid: int | str) -> int:
+def convert_taxid(taxid: int | str) -> int | None:
     """
     Convert and validate a taxid (int or string).
 

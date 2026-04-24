@@ -137,7 +137,7 @@ def latin_name_to_taxid(sci_name: str | list ) -> list:
     return [results[name] for name in sci_names]
 
 
-def resolve_value(value: int | str) -> int:
+def resolve_value(value: int | str) -> int | None:
     """
     Resolve a taxid or scientific name to a validated taxid.
     
