@@ -4,7 +4,7 @@ from taxonomap.solr_request import SolrClient
 client = SolrClient()
 
 
-def valid_taxid(taxid: int) -> int:
+def valid_taxid(taxid: int) -> int | None:
     """
     Validates that a given taxid exists in the NCBI taxonomy database.
 
@@ -93,6 +93,7 @@ def convert_taxid(taxid: int | str) -> int:
 
 def validate_taxid_list(taxids):
     """
+    DEPRECATED
     Validate a list of taxids.
     
     Parameters
