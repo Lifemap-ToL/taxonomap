@@ -115,7 +115,7 @@ print(newick)
 ```bash
 git clone https://github.com/Lifemap-ToL/taxonomap.git
 cd taxonomap
-uv sync .
+uv sync 
 ```
 
 ### Building the documentation
@@ -125,7 +125,7 @@ The taxonomap project uses [Sphinx](https://www.sphinx-doc.org/) to generate an 
 Before starting:
 ```bash
 # the documentation dependencies are already written in pyproject.toml
-uv sync .
+uv sync 
 ```
 
 How to build the documentationn:
