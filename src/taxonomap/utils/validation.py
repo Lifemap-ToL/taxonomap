@@ -129,3 +129,50 @@ def validate_taxid_list(taxids):
         validated.append(taxid_clean)
     
     return validated
+
+def normalize_taxid(taxid):
+    """
+    Normalize a taxid to integer WITHOUT database validation.
+    
+    This function only validates FORMAT and converts to int.
+    Does NOT check if the taxid exists in the database.
+    
+    Parameters
+    ----------
+    taxid : int or str
+        NCBI taxonomy identifier.
+    
+    Returns
+    -------
+    int
+        Normalized taxid as integer.
+    
+    Raises
+    ------
+    ValueError
+        If format is invalid.
+    
+    Examples
+    --------
+    >>> normalize_taxid(9606)
+    9606
+    
+    >>> normalize_taxid("9606")
+    9606
+    
+    >>> normalize_taxid(-5)
+    ValueError: Taxid must be >= 0
+    """
+    if isinstance(taxid, str):
+        try:
+            taxid = int(taxid)
+        except ValueError:
+            raise ValueError(f"Invalid taxid format: {taxid}")
+    
+    if not isinstance(taxid, int):
+        raise ValueError(f"Taxid must be int or str, got: {type(taxid)}")
+    
+    if taxid < 0:
+        raise ValueError(f"Taxid must be >= 0, got: {taxid}")
+    
+    return taxid

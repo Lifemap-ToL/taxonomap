@@ -1,7 +1,7 @@
 from taxonomap.solr_request import SolrClient
-from taxonomap.utils.validation import convert_taxid, validate_taxid_list
+from taxonomap.utils.validation import convert_taxid, validate_taxid_list, normalize_taxid
 import requests
-
+import warnings
 
 
 def taxid_to_latin_name(taxid: int | str | list) -> list:
@@ -43,19 +43,33 @@ def taxid_to_latin_name(taxid: int | str | list) -> list:
     else:
         taxids = taxid
 
-    # validation
-    validated = validate_taxid_list(taxids)
+    # str -> int for all elements in the list
+    normalized = [normalize_taxid(tid) for tid in taxids]
 
-    response = client.query_taxo_multiple(validated, fl="taxid,sci_name")
+    # separate special case LUCA
+    normal_taxids = [tid for tid in normalized if tid != 0]
+
+    results = {tid: None for tid in normalized}
+
+    response = client.query_taxo_multiple(normal_taxids, fl="taxid,sci_name")
     docs = response["response"]["docs"]
 
-    results = {doc["taxid"][0]: doc["sci_name"][0] for doc in docs}
+    for doc in docs:
+            results[doc["taxid"][0]] = doc["sci_name"][0] #results in dict
 
     # for special case LUCA
-    if 0 in validated:
+    if 0 in normalized:
         results[0] = "LUCA"
+    
+    # for missing taxids
+    missing = [tid for tid in normalized if results[tid] is None]
+    if missing:
+        warnings.warn(
+            f"Taxids not found in database: {missing}",
+            UserWarning
+        )
 
-    return [results[tid] for tid in validated]
+    return [results[tid] for tid in normalized]
 
 
 def latin_name_to_taxid(sci_name: str | list ) -> list:
@@ -100,22 +114,27 @@ def latin_name_to_taxid(sci_name: str | list ) -> list:
         if name == "":
             raise ValueError("Scientific name cannot be empty")
 
+    results = {name: None for name in sci_names}
+
     response = client.query_taxo_names_multiple(sci_names, fl='taxid,sci_name')
     docs = response["response"]["docs"]
 
-    results = {}
     for doc in docs:
         doc_name = doc["sci_name"][0]
         doc_taxid = doc["taxid"][0]
         
         # only keep the exact match, if not found yet
-        if doc_name in sci_names and doc_name not in results:
+        if doc_name in sci_names and results[doc_name] is None:
             results[doc_name] = doc_taxid
     
-    result_list = []
-    for name in sci_names:
-        result_list.append(results[name])
-    return result_list
+    missing = [name for name in sci_names if results[name] is None]
+    if missing:
+        warnings.warn(
+            f"No exact match found for: {missing}",
+            UserWarning
+        )
+    
+    return [results[name] for name in sci_names]
 
 
 def resolve_value(value):
