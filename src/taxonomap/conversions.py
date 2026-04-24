@@ -200,14 +200,3 @@ def get_version() -> str:
     except requests.exceptions.RequestException as e:
         raise RuntimeError(f"Failed to fetch version: {e}")
 
-
-if __name__ == "__main__":
-    print("Test 1:", taxid_to_latin_name(9606))
-    print("Test 2:", taxid_to_latin_name([9606, 965, 9685]))
-    print("Test 3:", taxid_to_latin_name([9606, 0, 965]))
-    print("Test 4:", taxid_to_latin_name("9606"))
-    print("Test 5:", taxid_to_latin_name([9606, 999999999, 965]))
-
-    print("Test 1:", latin_name_to_taxid(['Homo sapiens', 'Oceanospirillum', 'Felis catus']))
-    print("Test 2:", latin_name_to_taxid(['Homo sapiens']))
-    print("Test 3:", latin_name_to_taxid(['Homo sapiens', 'gg']))
