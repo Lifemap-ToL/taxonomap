@@ -97,7 +97,7 @@ class TestLatinNameToTaxid:
     def test_partial_name_no_match(self):
         """Test that a partial name does not match (exact match required)"""
         with pytest.warns(UserWarning, match="No exact match found"):
-            result = latin_name_to_taxid("Homo")
+            result = latin_name_to_taxid("Hom")
             assert result == [None]
 
     def test_empty_string(self):
