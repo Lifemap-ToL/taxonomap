@@ -21,15 +21,6 @@ uv add git+https://github.com/Lifemap-ToL/taxonomap.git
 ```
 uv run --with git+https://github.com/Lifemap-ToL/taxonomap.git python
 ```
-### `Install from GitHub`
-
----
-
-```bash
-git clone https://github.com/Lifemap-ToL/taxonomap.git
-cd taxonomap
-uv pip install .
-```
 
 ---
 
