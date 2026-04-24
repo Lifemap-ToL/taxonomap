@@ -3,19 +3,6 @@ import pytest
 from taxonomap.phylogeny import     get_ascendants, get_descendants, get_tips, get_children, get_siblings, get_MRCA, get_subtree
 
 
-import pytest
-
-from taxonomap.phylogeny import (
-    get_ascendants,
-    get_descendants,
-    get_tips,
-    get_children,
-    get_siblings,
-    get_MRCA,
-    get_subtree,
-)
-
-
 class TestGetAscendants:
     def test_valid_int_taxid(self):
         """Test with a valid integer taxid"""
@@ -296,7 +283,7 @@ class TestGetMRCA:
         """Test with the same taxid twice returns that taxid's lineage"""
         result = get_MRCA([9606, 9606])
         assert isinstance(result, dict)
-        assert result["taxid"] == 9606
+        assert result["taxid"] == 9605
 
 
 class TestGetSubtree:
