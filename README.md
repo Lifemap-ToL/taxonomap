@@ -115,7 +115,7 @@ print(newick)
 ```bash
 git clone https://github.com/Lifemap-ToL/taxonomap.git
 cd taxonomap
-uv sync install -e .
+uv sync
 ```
 
 ### Building the documentation

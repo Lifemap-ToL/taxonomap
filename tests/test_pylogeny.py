@@ -3,7 +3,7 @@ import pytest
 from taxonomap.phylogeny import get_ascendants  # , get_MRCA_taxid
 
 
-class Test_get_all_ascendant:
+class Test_get_ascendants:
     def test_empty_latin_name(self):
         """Test with empty string"""
         with pytest.raises(ValueError):
