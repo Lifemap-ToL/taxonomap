@@ -58,7 +58,7 @@ class SolrClient:
         Uses row=len(sci_names)*10 to handle the partial matches to ensure the exact matches are included in results.
 
         """
-        fq = " OR ".join([f'sci_name:"{name}"' for name in sci_names])
+        fq = " OR ".join([f'sci_name_str:"{name}"' for name in sci_names])
         return self.query_taxo(fq=fq, fl=fl, rows=len(sci_names) * 10)
 
     def result_get_ascendant(self, result):
