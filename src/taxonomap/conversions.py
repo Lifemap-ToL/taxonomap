@@ -137,7 +137,7 @@ def latin_name_to_taxid(sci_name: str | list ) -> list:
     return [results[name] for name in sci_names]
 
 
-def resolve_value(value):
+def resolve_value(value: int | str) -> int:
     """
     Resolve a taxid or scientific name to a validated taxid.
     
@@ -169,7 +169,7 @@ def resolve_value(value):
         if value == "":
             raise ValueError("Latin name cannot be empty")
         try:
-            value = convert_taxid(value)
+            convert_taxid(value)
         except ValueError:
             value = latin_name_to_taxid(value)
             value = value[0]

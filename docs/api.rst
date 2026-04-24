@@ -5,7 +5,7 @@ Conversion Functions
 --------------------
 
 .. automodule:: taxonomap.conversions
-   :members:
+   :members: taxid_to_latin_name, latin_name_to_taxid
    :undoc-members:
    :show-inheritance:
 
@@ -13,14 +13,6 @@ Phylogeny Functions
 -------------------
 
 .. automodule:: taxonomap.phylogeny
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Configuration
--------------
-
-.. automodule:: taxonomap.config
-   :members:
+   :members: get_ascendants, get_descendants, get_tips, get_children, get_siblings, get_MRCA
    :undoc-members:
    :show-inheritance:
