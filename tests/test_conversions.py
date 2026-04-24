@@ -140,7 +140,7 @@ class TestResolveValue:
         """Test with a non-existing taxid"""
         result = resolve_value(9999999999999)
         assert result is None
-
+    @pytest.mark.filterwarnings("ignore:.*No exact match found.*")
     def test_invalid_latin_name(self):
         """Test with a non-existing scientific name"""
         with pytest.raises((KeyError, ValueError)):
