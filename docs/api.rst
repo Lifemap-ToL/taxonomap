@@ -13,6 +13,6 @@ Phylogeny Functions
 -------------------
 
 .. automodule:: taxonomap.phylogeny
-   :members: get_ascendants, get_descendants, get_tips, get_children, get_siblings, get_MRCA
+   :members: get_ascendants, get_descendants, get_tips, get_children, get_siblings, get_MRCA, get_subtree
    :undoc-members:
    :show-inheritance:
