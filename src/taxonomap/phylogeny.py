@@ -317,7 +317,7 @@ def get_subtree(taxids: list) -> str:
     ValueError
         If fewer than 2 taxids are provided.
 
-        Examples
+    Examples
     --------
     >>> # Build a subtree for several mammals:
     >>> # human (9606), chimpanzee (9598), gorilla (9593),
