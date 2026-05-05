@@ -316,7 +316,16 @@ def get_subtree(taxids: list) -> str:
     ------
     ValueError
         If fewer than 2 taxids are provided.
-    """
+
+        Examples
+    --------
+    >>> # Build a subtree for several mammals:
+    >>> # human (9606), chimpanzee (9598), gorilla (9593),
+    >>> # mouse (10090), rat (10116), and dog (9615)
+    >>> get_subtree([9606, 9598, 9593, 10090, 10116, 9615])
+    '(9615,((10090,10116)39107,((9606,9598)207598,9593)9604)314146)1437010;'
+    """    
+
     if not isinstance(taxids, list):
         taxids = [taxids]
     if len(taxids) < 2:
